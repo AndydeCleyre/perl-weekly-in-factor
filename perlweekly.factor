@@ -1,6 +1,29 @@
-USING: arrays kernel math math.functions math.matrices
-math.parser math.statistics ranges sequences sequences.extras ;
+USING: arrays grouping kernel math math.combinatorics
+math.functions math.matrices math.parser math.statistics ranges
+sequences sequences.extras sorting ;
 IN: perlweekly
+
+! -- 249 --
+
+: equal-pairs ( seq -- pairs )
+  sort 2 group
+  dup [ first2 = ] all?
+  [ drop { } ] unless
+;
+
+: di-match ( s -- seq )                 ! "IDID"
+  dup length                            ! "IDID" 4
+  [ [0..b] ] [ [0..b) ] bi              ! "IDID" [0..4] [0..3]
+  '[                                    ! "IDID" perm
+    _ [                                 ! "IDID" perm i
+      [ pick nth ] keep                 ! "IDID" perm 'D' i
+      [ pick nth ] keep                 ! "IDID" perm 'D' 4 i
+      1 + reach nth                     ! "IDID" perm 'D' 4 1
+      > [ CHAR: D = ] [ CHAR: I = ] if  ! "IDID" perm t/f
+    ] all? nip                          ! "IDID" t/f
+  ] find-permutation                    ! "IDID" perm
+  nip                                   ! perm
+;
 
 ! -- 250 --
 
