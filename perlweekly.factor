@@ -19,15 +19,15 @@ IN: perlweekly
   2nip                              ! t/f
 ;
 
-: di-match ( s -- seq )                 ! "IDID"
-  dup length                            ! "IDID" 4
-  [ [0..b] ] [ [0..b) ] bi              ! "IDID" [0..4] [0..3]
-  '[ _                                  ! "IDID" perm0 [0..3]
-    [                                   ! "IDID" perm0 i
-      [ 2dup ] dip di-match?            ! "IDID" perm0 t/f
-    ] all? nip                          ! "IDID" t/f
-  ] find-permutation                    ! "IDID" perm
-  nip                                   ! perm
+: di-match ( s -- seq )       ! "IDID"
+  dup length                  ! "IDID" 4
+  [ [0..b] ] [ [0..b) ] bi    ! "IDID" [0..4] [0..3]
+  '[ _                        ! "IDID" perm0 [0..3]
+    [                         ! "IDID" perm0 i
+      [ 2dup ] dip di-match?  ! "IDID" perm0 t/f
+    ] all? nip                ! "IDID" t/f
+  ] find-permutation          ! "IDID" perm
+  nip                         ! perm
 ;
 
 ! -- 250 --
