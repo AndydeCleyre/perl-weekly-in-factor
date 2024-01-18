@@ -11,15 +11,20 @@ IN: perlweekly
   [ drop { } ] unless
 ;
 
+: di-match? ( s perm i -- ? )       ! s perm i
+  [ pick nth ] keep                 ! s perm char i
+  [ pick nth ] keep                 ! s perm char x i
+  1 + reach nth                     ! s perm char x y
+  > [ CHAR: D = ] [ CHAR: I = ] if  ! s perm t/f
+  2nip                              ! t/f
+;
+
 : di-match ( s -- seq )                 ! "IDID"
   dup length                            ! "IDID" 4
   [ [0..b] ] [ [0..b) ] bi              ! "IDID" [0..4] [0..3]
-  '[                                    ! "IDID" perm
-    _ [                                 ! "IDID" perm i
-      [ pick nth ] keep                 ! "IDID" perm 'D' i
-      [ pick nth ] keep                 ! "IDID" perm 'D' 4 i
-      1 + reach nth                     ! "IDID" perm 'D' 4 1
-      > [ CHAR: D = ] [ CHAR: I = ] if  ! "IDID" perm t/f
+  '[ _                                  ! "IDID" perm0 [0..3]
+    [                                   ! "IDID" perm0 i
+      [ 2dup ] dip di-match?            ! "IDID" perm0 t/f
     ] all? nip                          ! "IDID" t/f
   ] find-permutation                    ! "IDID" perm
   nip                                   ! perm
