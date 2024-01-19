@@ -1,6 +1,7 @@
-USING: arrays grouping kernel math math.combinatorics
-math.functions math.matrices math.parser math.statistics ranges
-sequences sequences.extras sorting ;
+USING: arrays grouping kernel math
+math.combinatorics math.functions math.matrices math.parser
+math.statistics ranges sequences sequences.extras
+sequences.product sorting ;
 IN: perlweekly
 
 ! -- 248 --
@@ -20,6 +21,21 @@ IN: perlweekly
   dupd '[ _ _ shortest-distance ]  ! str [ str char shortest-distance ]
   [ length [0..b) ] dip            ! [0..11] [ str char shortest-distance ]
   map                              ! distances
+;
+
+: corner-sum ( row col matrix -- n/f )
+  [
+    [ dup 1 + [a..b] ] bi@
+    2array <product-sequence>
+  ] dip
+  matrix-nths sum
+;
+
+: sum-matrix ( matrix -- m )
+  dup dimension
+  [ 1 - ] map first2
+  [ pick corner-sum ] <matrix-by-indices>
+  nip
 ;
 
 ! -- 249 --
