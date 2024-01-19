@@ -3,6 +3,25 @@ math.functions math.matrices math.parser math.statistics ranges
 sequences sequences.extras sorting ;
 IN: perlweekly
 
+! -- 248 --
+
+: shortest-distance ( i str char -- dist )
+  -rot                      ! char i str
+  [ drop nip ]              ! i
+  [ index-from ]            ! i1
+  [ swap head last-index ]  ! i2
+  3tri                      ! i i1 i2
+  2array sift               ! i {i1,i2}
+  swap '[ _ - abs ] map     ! {d1,d2}
+  infimum                   ! d1/d2
+;
+
+: shortest-distances ( str char -- distances )  ! "loveleetcode" 'e' -- { 3 2 1 0 1 0 0 1 2 2 1 0 }
+  dupd '[ _ _ shortest-distance ]               ! "loveleetcode" [ "loveleetcode" 'e' shortest-distance ]
+  [ length [0..b) ] dip                         ! [0..11] [ "loveleetcode" 'e' rot shortest-distance ]
+  map                                           ! distances
+;
+
 ! -- 249 --
 
 : equal-pairs ( seq -- pairs )
