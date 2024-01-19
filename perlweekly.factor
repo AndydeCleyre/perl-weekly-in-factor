@@ -16,10 +16,10 @@ IN: perlweekly
   infimum                   ! d1/d2
 ;
 
-: shortest-distances ( str char -- distances )  ! "loveleetcode" 'e' -- { 3 2 1 0 1 0 0 1 2 2 1 0 }
-  dupd '[ _ _ shortest-distance ]               ! "loveleetcode" [ "loveleetcode" 'e' shortest-distance ]
-  [ length [0..b) ] dip                         ! [0..11] [ "loveleetcode" 'e' rot shortest-distance ]
-  map                                           ! distances
+: shortest-distances ( str char -- distances )
+  dupd '[ _ _ shortest-distance ]  ! str [ str char shortest-distance ]
+  [ length [0..b) ] dip            ! [0..11] [ str char shortest-distance ]
+  map                              ! distances
 ;
 
 ! -- 249 --
