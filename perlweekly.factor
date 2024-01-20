@@ -1,8 +1,43 @@
-USING: arrays grouping kernel math
+USING: arrays assocs assocs.extras grouping io kernel math
 math.combinatorics math.functions math.matrices math.parser
-math.statistics ranges sequences sequences.extras
-sequences.product sorting ;
+math.statistics random ranges sequences sequences.extras
+sequences.product sorting splitting ;
 IN: perlweekly
+
+! -- 247 --
+
+: >surname ( name -- surname )
+  " " split1 nip
+;
+
+: preferably-not ( seq surname -- name )
+  '[ >surname _ = ]     ! seq match?
+  dupd reject           ! seq seq'
+  [ nip ] unless-empty  ! seq/seq'
+  random                ! name
+;
+
+: (secret-santa) ( seq giver -- recvr )
+  swap dupd remove swap  ! seq' giver
+  >surname               ! seq' giver-surname
+  preferably-not         ! recvr
+;
+
+: secret-santa ( names -- )
+  dup [                      ! names giver
+    dup " -> " append write  ! names giver
+    dupd (secret-santa)      ! names recvr
+    dup write nl             ! names recvr
+    swap remove              ! names
+  ] each drop                !
+;
+
+: most-frequent-letter-pair ( str -- str' )
+  2 clump sorted-histogram
+  dup last last
+  '[ _ = ] filter-values
+  keys infimum
+;
 
 ! -- 248 --
 
