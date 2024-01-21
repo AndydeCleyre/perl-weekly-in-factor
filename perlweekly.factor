@@ -20,10 +20,9 @@ IN: perlweekly
 
 : linear-recurrence-2nd-order? ( a -- ? )
   2 4 [a..b] [           ! a | n
-    dupd 2dup            ! a | a n a n
-    [ 2 - ] [ 1 - ] 2bi  ! a | a n a n-2 a n-1
-    [ nth-of ] 2tri@     ! a | a[n] a[n-2] a[n-1]
-    (linear-recurrence-2nd-order?)
+    [ 2 - ] [ 1 + ] bi   ! a | n-2 n+1
+    pick subseq first3   ! a | a[n-2] a[n-1] a[n]
+    -rot (linear-recurrence-2nd-order?)
   ] all? nip
 ;
 
