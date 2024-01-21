@@ -1,8 +1,31 @@
 USING: arrays assocs assocs.extras grouping io kernel math
 math.combinatorics math.functions math.matrices math.parser
-math.statistics random ranges sequences sequences.extras
-sequences.product sorting splitting ;
+math.statistics prettyprint random ranges sequences
+sequences.extras sequences.product sorting splitting vectors ;
 IN: perlweekly
+
+! -- 246 --
+
+: 6-of-49 ( -- )
+  49 [1..b] >vector randomize
+  6 [ dup pop . ] times
+  drop
+;
+
+: (linear-recurrence-2nd-order?) ( a[n] a[n-2] a[n-1] -- ? )
+  ! a[n] = p * a[n-2] + q * a[n-1]
+  ! oh, math?
+  3drop f
+;
+
+: linear-recurrence-2nd-order? ( a -- ? )
+  2 4 [a..b] [           ! a | n
+    dupd 2dup            ! a | a n a n
+    [ 2 - ] [ 1 - ] 2bi  ! a | a n a n-2 a n-1
+    [ nth-of ] 2tri@     ! a | a[n] a[n-2] a[n-1]
+    (linear-recurrence-2nd-order?)
+  ] all? nip
+;
 
 ! -- 247 --
 
