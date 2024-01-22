@@ -1,7 +1,8 @@
-USING: arrays assocs assocs.extras grouping io kernel math
-math.combinatorics math.functions math.matrices math.parser
-math.statistics prettyprint random ranges sequences
-sequences.extras sequences.product sorting splitting vectors ;
+USING: arrays assocs assocs.extras combinators grouping io
+kernel math math.combinatorics math.functions math.matrices
+math.order math.parser math.statistics prettyprint random ranges
+sequences sequences.extras sequences.product sorting splitting
+strings vectors ;
 IN: perlweekly
 
 ! -- 246 --
@@ -181,4 +182,28 @@ IN: perlweekly
 
 : unique-sum-zero ( n -- seq )
   [ { } ] [ [1..b) dup sum -1 * suffix ] if-zero
+;
+
+! -- 253 --
+
+: split-strings ( strings char -- words )  ! { "one.two.three" "four.five" "six" } '.'
+  1string '[ _ split ] map-concat harvest
+;
+
+: row-compare ( i j m -- <=> )
+  [ 2dup 2array ] dip    ! i j { i j } m
+  rows first2            ! i j ri rj
+  [ [ 1 = ] count ] bi@  ! i j #r1 #j1
+  <=>                    ! i j +lt+/+eq+/+gt+
+  {
+    { +lt+ [ 2drop +lt+ ] }
+    { +gt+ [ 2drop +gt+ ] }
+    { +eq+ [ <=> ] }
+  } case
+;
+
+: weakest-rows ( m -- seq )
+  [ length [0..b) ]
+  [ '[ _ row-compare ] ]
+  bi sort-with
 ;
