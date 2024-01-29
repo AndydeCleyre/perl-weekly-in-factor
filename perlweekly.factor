@@ -211,6 +211,7 @@ IN: perlweekly
 ! -- 254 --
 
 : cubish? ( n -- ? )
+  abs
   3 swap nth-root
   1 mod
   0 number=
