@@ -1,8 +1,8 @@
-USING: arrays assocs assocs.extras combinators grouping io
-kernel math math.combinatorics math.functions math.matrices
+USING: arrays assocs assocs.extras combinators english grouping
+io kernel math math.combinatorics math.functions math.matrices
 math.order math.parser math.statistics prettyprint random ranges
 sequences sequences.extras sequences.product sorting splitting
-strings vectors ;
+strings unicode vectors ;
 IN: perlweekly
 
 ! -- 246 --
@@ -206,4 +206,23 @@ IN: perlweekly
   [ length [0..b) ]
   [ '[ _ row-compare ] ]
   bi sort-with
+;
+
+! -- 254 --
+
+: cubish? ( n -- ? )
+  3 swap nth-root
+  1 mod
+  0 number=
+;
+
+: reverse-vowels ( str -- str' )
+  [ >lower [ vowel? ] find-all ]
+  [ clone ] bi                     ! idx-vowels str
+  over keys [                      ! idx-vowels str idx
+    2dup nth-of 1string upper?     ! idx-vowels str idx t/f
+    reach pop last swap            ! idx-vowels str idx vowel t/f
+    [ 1string >upper first ] when  ! idx-vowels str idx vowel
+    swap pick set-nth              ! idx-vowels str'
+  ] each nip                       ! str'
 ;
