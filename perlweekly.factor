@@ -223,7 +223,7 @@ IN: perlweekly
     2dup nth-of 1string upper?  ! idx-vowels str | idx t/f
     reach pop last swap         ! idx-vowels str | idx vowel t/f
     [ ch>upper ] when           ! idx-vowels str | idx vowel
-    swap pick set-nth           ! idx-vowels str'
+    set-nth-of                  ! idx-vowels str'
   ] each nip                    ! str'
 ;
 
