@@ -47,11 +47,11 @@ IN: perlweekly
 ;
 
 : secret-santa ( names -- )
-  dup [                      ! names giver
-    dup " -> " append write  ! names giver
-    dupd (secret-santa)      ! names recvr
-    dup write nl             ! names recvr
-    swap remove              ! names
+  dup [                      ! names | giver
+    dup " -> " append write  ! names | giver
+    dupd (secret-santa)      ! names | recvr
+    dup write nl             ! names | recvr
+    swap remove              ! names'
   ] each drop                !
 ;
 
@@ -218,11 +218,24 @@ IN: perlweekly
 
 : reverse-vowels ( str -- str' )
   [ >lower [ vowel? ] find-all ]
-  [ clone ] bi                     ! idx-vowels str
-  over keys [                      ! idx-vowels str idx
-    2dup nth-of 1string upper?     ! idx-vowels str idx t/f
-    reach pop last swap            ! idx-vowels str idx vowel t/f
-    [ 1string >upper first ] when  ! idx-vowels str idx vowel
-    swap pick set-nth              ! idx-vowels str'
-  ] each nip                       ! str'
+  [ clone ] bi                  ! idx-vowels str
+  over keys [                   ! idx-vowels str | idx
+    2dup nth-of 1string upper?  ! idx-vowels str | idx t/f
+    reach pop last swap         ! idx-vowels str | idx vowel t/f
+    [ ch>upper ] when           ! idx-vowels str | idx vowel
+    swap pick set-nth           ! idx-vowels str'
+  ] each nip                    ! str'
+;
+
+: reverse-vowels-2 ( str -- str' )
+  [ clone ] [
+    >lower [ vowel? ] find-all
+    [ values reverse ] [ keys ] bi
+  ] bi                       ! str vowels idxs
+  [                          ! str | vowel idx
+    pick dupd nth            ! str | vowel idx orig
+    1string upper?           ! str | vowel idx t/f
+    swapd [ ch>upper ] when  ! str | idx vowel
+    set-nth-of               ! str'
+  ] 2each                    ! str'
 ;
