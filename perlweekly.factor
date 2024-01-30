@@ -214,7 +214,7 @@ IN: perlweekly
   abs
   3 swap nth-root
   1 mod
-  0 number=
+  zero?
 ;
 
 : reverse-vowels ( str -- str' )
