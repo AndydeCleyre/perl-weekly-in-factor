@@ -253,7 +253,7 @@ IN: perlweekly
 
 : most-frequent-word ( paragraph banned-word -- most-frequent-word )
   ! [ >lower ] bi@
-  swap [ ",.!:?" member? ] reject
+  swap ",.!:?" without
   split-words remove
   mode
 ;
