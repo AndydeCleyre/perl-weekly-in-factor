@@ -240,3 +240,20 @@ IN: perlweekly
     set-nth-of               ! str'
   ] 2each                    ! str'
 ;
+
+! -- 255 --
+
+: odd-character ( s t -- 1str )  ! "Perl" "Preel"
+  ! [ >lower ] bi@
+  swap [                         ! "Preel" | 'P'
+    over index                   ! "Preel" | 0/f
+    [ remove-nth-of ] when*      ! "reel"  |
+  ] each                         ! "e"
+;
+
+: most-frequent-word ( paragraph banned-word -- most-frequent-word )
+  ! [ >lower ] bi@
+  swap [ ",.!:?" member? ] reject
+  split-words remove
+  mode
+;
