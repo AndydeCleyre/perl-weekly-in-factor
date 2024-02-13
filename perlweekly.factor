@@ -286,12 +286,7 @@ IN: perlweekly
 ;
 
 : merge-strings ( str1 str2 -- str )
-  [ zip "" concat-as ]
-  [
-    2array [ length ] zip-with inv-sort-values
-    [ first first ]
-    [ [ first ] [ last ] bi [ last ] bi@ - ] bi
-    tail*
-  ] 2bi
-  append
+  [ >array ] bi@
+  zip-longest concat sift
+  >string
 ;
