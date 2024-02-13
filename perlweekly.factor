@@ -1,8 +1,17 @@
-USING: arrays assocs assocs.extras combinators english grouping
-io kernel math math.combinatorics math.functions math.matrices
-math.order math.parser math.statistics prettyprint random ranges
-sequences sequences.extras sequences.product sorting splitting
-strings unicode vectors ;
+USING:
+  arrays assocs assocs.extras
+  combinators
+  english
+  grouping
+  io
+  kernel
+  math math.combinatorics math.functions math.matrices math.order math.parser math.statistics
+  prettyprint
+  random ranges
+  sets sequences sequences.extras sequences.product sorting splitting strings
+  unicode
+  vectors
+;
 IN: perlweekly
 
 ! -- 246 --
@@ -256,4 +265,33 @@ IN: perlweekly
   swap ",.!:?" without
   split-words remove
   mode
+;
+
+! -- 256 --
+! Not sure I interpreted the task correctly
+
+: max-pairs ( words -- n )
+  dup '[
+    [ reverse _ in? ]
+    [ cardinality 1 > ] bi and
+  ] filter
+
+  histogram
+
+  dup '[
+    dupd swap reverse _ at min
+  ] assoc-map
+
+  sum-values 2 /
+;
+
+: merge-strings ( str1 str2 -- str )
+  [ zip "" concat-as ]
+  [
+    2array [ length ] zip-with inv-sort-values
+    [ first first ]
+    [ [ first ] [ last ] bi [ last ] bi@ - ] bi
+    tail*
+  ] 2bi
+  append
 ;
