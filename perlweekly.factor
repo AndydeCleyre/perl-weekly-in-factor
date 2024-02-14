@@ -279,7 +279,7 @@ IN: perlweekly
   histogram
 
   dup '[
-    dupd swap reverse _ at min
+    over reverse _ at min
   ] assoc-map
 
   sum-values 2 /
