@@ -290,3 +290,11 @@ IN: perlweekly
   zip-longest concat sift
   >string
 ;
+
+! -- 257 --
+
+: smaller-than-current ( ints -- n )
+  dup [
+    over [ over < ] count nip
+  ] map nip
+;
