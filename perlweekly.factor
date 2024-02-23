@@ -1,6 +1,6 @@
 USING:
   arrays assocs assocs.extras
-  combinators
+  combinators combinators.short-circuit.smart
   english
   grouping
   io
@@ -297,4 +297,41 @@ IN: perlweekly
   dup [
     over [ over < ] count nip
   ] map nip
+;
+
+MEMO: leading-1 ( row -- i/f )
+  [ zero? not ] find  ! i/f n/f
+  1 number=           ! i/f t/f
+  [ drop f ] unless   ! i/f
+;
+
+MEMO: all-zeros? ( seq -- ? )
+  [ zero? ] all?
+;
+
+: (rre-1?) ( m -- ? )
+  [ { [ all-zeros? ] [ leading-1 ] } || ] all?
+;
+
+: (rre-2?) ( m -- ? )
+  dup [ all-zeros? ] count
+  tail* [ all-zeros? ] all?
+;
+
+: (rre-3?) ( m -- ? )
+  [
+    [ leading-1 ] bi@
+    2dup and [ < ] [ 2drop t ] if
+  ] monotonic?
+;
+
+: (rre-4?) ( m -- ? )
+  [ [ leading-1 ] map-sift ]
+  [ cols ]
+  [ length 1 - ] tri  ! cols n
+  '[ [ zero? ] count _ number= ] all?
+;
+
+: reduced-row-echelon? ( m -- ? )
+  { [ (rre-1?) ] [ (rre-2?) ] [ (rre-3?) ] [ (rre-4?) ] } &&
 ;
