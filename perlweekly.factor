@@ -341,3 +341,13 @@ MEMO: all-zeros? ( seq -- ? )
 : count-even-digits-number ( seq -- n )
   [ log10 >integer odd? ] count
 ;
+
+MEMO: binary-rep-has-k-ones? ( int k -- ? )
+  swap 2 >base [ CHAR: 1 = ] count number=
+;
+
+: sum-of-values ( ints k -- n )
+  [ dup length [0..b) ]
+  [ '[ _ binary-rep-has-k-ones? ] ]
+  bi* filter nths-of sum
+;
