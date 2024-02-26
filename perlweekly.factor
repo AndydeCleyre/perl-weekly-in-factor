@@ -339,5 +339,5 @@ MEMO: all-zeros? ( seq -- ? )
 ! -- 258 --
 
 : count-even-digits-number ( seq -- n )
-  [ log10 >integer odd? ] map-sift length
+  [ log10 >integer odd? ] count
 ;
