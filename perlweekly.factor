@@ -335,3 +335,9 @@ MEMO: all-zeros? ( seq -- ? )
 : reduced-row-echelon? ( m -- ? )
   { [ (rre-1?) ] [ (rre-2?) ] [ (rre-3?) ] [ (rre-4?) ] } &&
 ;
+
+! -- 258 --
+
+: count-even-digits-number ( seq -- n )
+  [ log10 >integer odd? ] map-sift length
+;
