@@ -1,5 +1,6 @@
 USING:
   arrays assocs assocs.extras
+  calendar calendar.format calendar.parser
   combinators combinators.short-circuit.smart
   english
   grouping
@@ -25,6 +26,7 @@ IN: perlweekly
 : (linear-recurrence-2nd-order?) ( a[n] a[n-2] a[n-1] -- ? )
   ! a[n] = p * a[n-2] + q * a[n-1]
   ! oh, math?
+  ! Sorry, not implementing this for now.
   3drop f
 ;
 
@@ -350,4 +352,20 @@ MEMO: binary-rep-has-k-ones? ( int k -- ? )
   [ dup length [0..b) ]
   [ '[ _ binary-rep-has-k-ones? ] ]
   bi* filter nths-of sum
+;
+
+! -- 259 --
+
+: banking-days ( start-date end-date weekday-exceptions -- n )
+  [ [ weekdays-between ] 2keep ] dip  ! n start end holidays
+  -rot '[ _ _ between? ] count -      ! n
+;
+
+: banking-day-offset ( yyyy-mm-dd offset holidays -- yyyy-mm-dd )
+  [ ymd>timestamp ] map [ weekend? ] reject  ! ymd offset weekday-exceptions
+  [ ymd>timestamp ]                          ! start | offset
+  [ [ dupd days time+ ] keep ]               ! start end offset | weekday-exceptions
+  [ '[ _ [ _ banking-days ] dip > ] ] tri*   ! start end correct-daycount?
+  '[ 2dup @ ] [ 1 days time+ ] until         ! start end
+  nip timestamp>ymd                          ! ymd
 ;
