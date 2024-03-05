@@ -357,15 +357,24 @@ MEMO: binary-rep-has-k-ones? ( int k -- ? )
 ! -- 259 --
 
 : banking-days ( start-date end-date weekday-exceptions -- n )
-  [ [ weekdays-between ] 2keep ] dip  ! n start end holidays
-  -rot '[ _ _ between? ] count -      ! n
+  [ [ weekdays-between ] 2keep ] dip  ! n start end | holidays
+  -rot '[ _ _ between? ]              ! n holidays [within-dates?]
+  count -                             ! n
 ;
 
-: banking-day-offset ( yyyy-mm-dd offset holidays -- yyyy-mm-dd )
+: more-days-needed ( start end needed-workdays weekday-exceptions -- n )
+  swap [ banking-days ] dip
+  swap -
+;
+
+: banking-day-offset ( ymd offset holidays -- ymd )
   [ ymd>timestamp ] map [ weekend? ] reject  ! ymd offset weekday-exceptions
-  [ ymd>timestamp ]                          ! start | offset
-  [ [ dupd days time+ ] keep ]               ! start end offset | weekday-exceptions
-  [ '[ _ [ _ banking-days ] dip > ] ] tri*   ! start end correct-daycount?
-  '[ 2dup @ ] [ 1 days time+ ] until         ! start end
-  nip timestamp>ymd                          ! ymd
+
+  [ ymd>timestamp ]                   ! start | offset
+  [ [ dupd days time+ ] keep 1 + ]    ! start end needed-workdays | weekday-exceptions
+  [ '[ _ _ more-days-needed ] ] tri*  ! start end [more-days-needed']
+
+  '[ 2dup @ dup zero? [ drop t ] [ days time+ f ] if ] [ ] until  ! start end'
+
+  nip timestamp>ymd
 ;
