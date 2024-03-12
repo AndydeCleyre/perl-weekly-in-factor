@@ -378,3 +378,12 @@ MEMO: binary-rep-has-k-ones? ( int k -- ? )
 
   nip timestamp>ymd
 ;
+
+! TODO: part 2
+
+! -- 260 --
+
+: unique-occurrences ( ints -- 0/1 )
+  histogram values all-unique? 1 0 ?
+;
+
