@@ -383,7 +383,13 @@ MEMO: binary-rep-has-k-ones? ( int k -- ? )
 
 ! -- 260 --
 
-: unique-occurrences ( ints -- 0/1 )
-  histogram values all-unique? 1 0 ?
+: unique-occurrences ( ints -- 1/0 )
+  histogram values all-unique?
+  1 0 ?
 ;
 
+: dict-rank ( word -- n )
+  >upper dup
+  all-unique-permutations sort
+  index 1 +
+;
