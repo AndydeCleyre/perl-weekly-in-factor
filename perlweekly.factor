@@ -402,3 +402,8 @@ MEMO: binary-rep-has-k-ones? ( int k -- ? )
     [ 1string string>number ] map-sum
   ] bi - abs
 ;
+
+: multiply-by-two ( ints start -- n )
+  2dup index*
+  [ 2 * multiply-by-two ] [ nip ] if
+;
