@@ -393,3 +393,12 @@ MEMO: binary-rep-has-k-ones? ( int k -- ? )
   all-unique-permutations sort
   index 1 +
 ;
+
+! -- 261 --
+
+: element-digit-sum ( ints -- sum )
+  [ sum ] [
+    [ number>string ] map-concat
+    [ 1string string>number ] map-sum
+  ] bi - abs
+;
