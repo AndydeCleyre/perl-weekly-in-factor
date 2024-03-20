@@ -404,6 +404,8 @@ MEMO: binary-rep-has-k-ones? ( int k -- ? )
 ;
 
 : multiply-by-two ( ints start -- n )
-  2dup index*
-  [ 2 * multiply-by-two ] [ nip ] if
+  dup zero? [ nip ] [
+    2dup index*
+    [ 2 * multiply-by-two ] [ nip ] if
+  ] if
 ;
