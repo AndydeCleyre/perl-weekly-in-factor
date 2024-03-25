@@ -409,3 +409,24 @@ MEMO: binary-rep-has-k-ones? ( int k -- ? )
     [ 2 * multiply-by-two ] [ nip ] if
   ] if
 ;
+
+! -- 262 --
+
+: max-positive-negative ( ints -- n )
+  [ [ neg? ] count ]
+  [ [ 0 > ] count ] bi
+  max
+;
+
+: count-equal-divisible ( ints k -- n )
+  0 spin
+  dup length [0..b)
+  [
+    dupd
+    [ nth-of ] keep
+    [ dupd indices* ] dip
+    dup '[ [ _ > ] filter ] dip
+    reach '[ _ * _ divisor? ] count
+    '[ _ + ] 2dip
+  ] each 2drop
+;
