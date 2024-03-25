@@ -425,9 +425,9 @@ MEMO: binary-rep-has-k-ones? ( int k -- ? )
     -rot '[ _ * _ divisor? ] count           ! n
 ;
 
-: count-equal-divisible ( ints k -- n )   ! ints k
-  0 spin                                  ! sum k ints
+: count-equal-divisible ( ints k -- n )  ! ints k
+  swap                                   ! k ints
   [ '[ _ _ (count-equal-divisible) ] ]
-  [ length [0..b) ] bi                    ! sum (c-e-d) range
-  swap '[ @ + ] each
+  [ length [0..b) ] bi                   ! (c-e-d) range
+  swap map-sum
 ;
