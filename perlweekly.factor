@@ -424,14 +424,18 @@ MEMO: binary-rep-has-k-ones? ( int k -- ? )
   [ length ] bi@ max
 ;
 
-: count-equal-divisible ( ints k -- n )  ! ints k
-  0 spin                                 ! 0 k ints
-  dup length [0..b) [                    ! 0 k ints | i
-    dupd                                 ! 0 k ints | ints i
-    [ nth-of ] keep                      ! 0 k ints | ints[i] i
-    [ dupd indices* ] dip                ! 0 k ints | js i
-    dup '[ [ _ > ] filter ] dip          ! 0 k ints | js* i
-    reach '[ _ * _ divisor? ] count      ! 0 k ints | n
-    '[ _ + ] 2dip                        ! n k ints
-  ] each 2drop                           ! n*
+: (count-equal-divisible) ( k ints i -- n )  ! k ints i
+    dupd [ nth-of ] keep                     ! k ints ints[i] i
+    [ dupd indices* ] dip                    ! k ints js i
+    dup '[ [ _ > ] filter ] dip              ! k ints js* i
+    reach '[ _ * _ divisor? ] count          ! k ints n
+    2nip                                     ! n
+;
+
+: count-equal-divisible ( ints k -- n )   ! ints k
+  0 spin                                  ! sum k ints
+  dup length [0..b) [                     ! sum k ints | i
+    [ 2dup ] dip (count-equal-divisible)  ! sum k ints | n
+    '[ _ + ] 2dip                         ! sum* k ints
+  ] each 2drop                            ! sum*
 ;
