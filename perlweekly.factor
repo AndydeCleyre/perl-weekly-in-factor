@@ -433,8 +433,7 @@ MEMO: binary-rep-has-k-ones? ( int k -- ? )
 
 : count-equal-divisible ( ints k -- n )   ! ints k
   0 spin                                  ! sum k ints
-  dup length [0..b) [                     ! sum k ints | i
-    [ 2dup ] dip (count-equal-divisible)  ! sum k ints | n
-    '[ _ + ] 2dip                         ! sum* k ints
-  ] each 2drop                            ! sum*
+  [ '[ _ _ rot (count-equal-divisible) ] ]
+  [ length [0..b) ] bi                    ! sum (c-e-d) range
+  swap '[ @ + ] each
 ;
