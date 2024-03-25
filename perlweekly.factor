@@ -425,10 +425,10 @@ MEMO: binary-rep-has-k-ones? ( int k -- ? )
 ;
 
 : (count-equal-divisible) ( k ints i -- n )  ! k ints i
-    dupd [ nth-of ] keep                     ! k ints ints[i] i
-    [ indices* ] dip                         ! k js i
-    dup '[ [ _ > ] filter ] dip              ! k js* i
-    rot '[ _ * _ divisor? ] count            ! n
+    over dupd nth                            ! k ints i ints[i]
+    rot indices                              ! k i js
+    over '[ _ > ] filter                     ! k i js*
+    spin '[ _ * _ divisor? ] count           ! n
 ;
 
 : count-equal-divisible ( ints k -- n )   ! ints k
