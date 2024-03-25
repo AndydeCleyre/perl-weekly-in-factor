@@ -418,6 +418,12 @@ MEMO: binary-rep-has-k-ones? ( int k -- ? )
   max
 ;
 
+: max-positive-negative-2 ( ints -- n )
+  [ neg? ] partition
+  [ zero? ] reject
+  [ length ] bi@ max
+;
+
 : count-equal-divisible ( ints k -- n )  ! ints k
   0 spin                                 ! 0 k ints
   dup length [0..b) [                    ! 0 k ints | i
