@@ -413,12 +413,6 @@ MEMO: binary-rep-has-k-ones? ( int k -- ? )
 ! -- 262 --
 
 : max-positive-negative ( ints -- n )
-  [ [ neg? ] count ]
-  [ [ 0 > ] count ] bi
-  max
-;
-
-: max-positive-negative-2 ( ints -- n )
   [ neg? ] partition
   [ zero? ] reject
   [ length ] bi@ max
