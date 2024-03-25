@@ -115,12 +115,12 @@ IN: perlweekly
   [ drop { } ] unless
 ;
 
-: di-match? ( s perm i -- ? )       ! s perm i
-  [ pick nth ] keep                 ! s perm char i
-  [ pick nth ] keep                 ! s perm char x i
-  1 + reach nth                     ! s perm char x y
-  > [ CHAR: D = ] [ CHAR: I = ] if  ! s perm t/f
-  2nip                              ! t/f
+: di-match? ( s perm i -- ? )  ! s perm i
+  [ pick nth ] keep            ! s perm char i
+  [ pick nth ] keep            ! s perm char x i
+  1 + reach nth                ! s perm char x y
+  > CHAR: D CHAR: I ? =        ! s perm t/f
+  2nip                         ! t/f
 ;
 
 : di-match ( s -- seq )       ! "IDID"
