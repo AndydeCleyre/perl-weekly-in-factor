@@ -3,7 +3,7 @@ USING:
   calendar calendar.format calendar.parser
   combinators combinators.short-circuit.smart
   english
-  grouping
+  grouping grouping.extras
   io
   kernel
   math math.combinatorics math.functions math.matrices math.order math.parser math.statistics
@@ -428,6 +428,22 @@ MEMO: binary-rep-has-k-ones? ( int k -- ? )
 : count-equal-divisible ( ints k -- n )  ! ints k
   swap                                   ! k ints
   [ '[ _ _ (count-equal-divisible) ] ]
-  [ length [0..b) ] bi                   ! (c-e-d) range
+  [ length [0..b) ] bi                   ! ( i -- n ) range
   swap map-sum
+;
+
+! -- 263 --
+
+: target-index ( ints k -- indices )
+  swap sort indices ;
+
+: merge-items ( items1 items2 -- items )
+  [
+    sort-keys [ first ] group-by
+    [
+      [ first ] [ last ] bi
+      sum-values 2array
+    ] map
+  ] bi@
+  [ + ] assoc-merge
 ;
