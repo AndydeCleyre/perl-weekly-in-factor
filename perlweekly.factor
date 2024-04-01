@@ -3,7 +3,7 @@ USING:
   calendar calendar.format calendar.parser
   combinators combinators.short-circuit.smart
   english
-  grouping grouping.extras
+  grouping
   io
   kernel
   math math.combinatorics math.functions math.matrices math.order math.parser math.statistics
@@ -439,11 +439,8 @@ MEMO: binary-rep-has-k-ones? ( int k -- ? )
 
 : merge-items ( items1 items2 -- items )
   [
-    sort-keys [ first ] group-by
-    [
-      [ first ] [ last ] bi
-      sum-values 2array
-    ] map
+    [ first ] collect-by
+    [ sum-values ] assoc-map
   ] bi@
   [ + ] assoc-merge
 ;
