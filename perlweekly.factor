@@ -437,10 +437,10 @@ MEMO: binary-rep-has-k-ones? ( int k -- ? )
 : target-index ( ints k -- indices )
   swap sort indices ;
 
+: single-merge ( items -- merged-items )
+  [ first ] collect-by
+  [ sum-values ] assoc-map ;
+
 : merge-items ( items1 items2 -- items )
-  [
-    [ first ] collect-by
-    [ sum-values ] assoc-map
-  ] bi@
-  [ + ] assoc-merge
-;
+  [ single-merge ] bi@
+  [ + ] assoc-merge ;
