@@ -455,4 +455,4 @@ MEMO: binary-rep-has-k-ones? ( int k -- ? )
 
 : target-array ( source indices -- target )
   [ V{ } clone ] 2dip
-  zip [ pick insert-nth! ] assoc-each ;
+  [ pick insert-nth! ] 2each ;
