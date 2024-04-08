@@ -451,7 +451,7 @@ MEMO: binary-rep-has-k-ones? ( int k -- ? )
   dup [
     { [ 1string upper? ] [ ch>lower over in? ] } &&
   ] filter nip
-  dup empty? [ >upper supremum 1string ] unless ;
+  dup empty? [ supremum 1string ] unless ;
 
 : target-array ( source indices -- target )
   [ V{ } clone ] 2dip
