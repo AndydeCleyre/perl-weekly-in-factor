@@ -444,3 +444,15 @@ MEMO: binary-rep-has-k-ones? ( int k -- ? )
 : merge-items ( items1 items2 -- items )
   [ single-merge ] bi@
   [ + ] assoc-merge ;
+
+! -- 264 --
+
+: greatest-english-letter ( str -- str' )
+  dup [
+    { [ 1string upper? ] [ ch>lower over in? ] } &&
+  ] filter nip
+  dup empty? [ >upper supremum 1string ] unless ;
+
+: target-array ( source indices -- target )
+  [ V{ } clone ] 2dip
+  zip [ pick insert-nth! ] assoc-each ;
