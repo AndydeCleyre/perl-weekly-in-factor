@@ -138,16 +138,13 @@ IN: perlweekly
 
 : smallest-index ( seq -- i )
   [ 10 mod = ] find-index drop  ! i/f
-  [ -1 ] unless*
-;
+  [ -1 ] unless* ;
 
 : alphanum>val ( str -- n )
-  dup string>number [ nip ] [ length ] if*
-;
+  dup string>number [ nip ] [ length ] if* ;
 
 : alphanum-max ( seq -- n )
-  [ alphanum>val ] map-supremum
-;
+  [ alphanum>val ] map-supremum ;
 
 ! -- 251 --
 
@@ -181,25 +178,21 @@ IN: perlweekly
   [ 2array dupd lucky? ] cartesian-find  ! { { 3 7 8 } { 9 11 13 } { 15 16 17 } } 2 0
   dup [
     2array swap matrix-nth               ! 15
-  ] [ 3drop -1 ] if
-;
+  ] [ 3drop -1 ] if ;
 
 ! -- 252 --
 
 : special-numbers ( seq -- n )
   dup length '[ nip 1 + _ swap divisor? ] filter-index
-  sum-of-squares
-;
+  sum-of-squares ;
 
 : unique-sum-zero ( n -- seq )
-  [ { } ] [ [1..b) dup sum -1 * suffix ] if-zero
-;
+  [ { } ] [ [1..b) dup sum -1 * suffix ] if-zero ;
 
 ! -- 253 --
 
 : split-strings ( strings char -- words )  ! { "one.two.three" "four.five" "six" } '.'
-  1string '[ _ split ] map-concat harvest
-;
+  1string '[ _ split ] map-concat harvest ;
 
 : row-compare ( i j m -- <=> )
   [ 2dup 2array ] dip    ! i j { i j } m
@@ -210,14 +203,12 @@ IN: perlweekly
     { +lt+ [ 2drop +lt+ ] }
     { +gt+ [ 2drop +gt+ ] }
     { +eq+ [ <=> ] }
-  } case
-;
+  } case ;
 
 : weakest-rows ( m -- seq )
   [ length [0..b) ]
   [ '[ _ row-compare ] ]
-  bi sort-with
-;
+  bi sort-with ;
 
 ! -- 254 --
 
@@ -225,8 +216,7 @@ IN: perlweekly
   abs
   3 swap nth-root
   1 mod
-  zero?
-;
+  zero? ;
 
 : reverse-vowels ( str -- str' )
   [ >lower [ vowel? ] find-all ]
@@ -236,8 +226,7 @@ IN: perlweekly
     reach pop last swap         ! idx-vowels str | idx vowel t/f
     [ ch>upper ] when           ! idx-vowels str | idx vowel
     set-nth-of                  ! idx-vowels str'
-  ] each nip                    ! str'
-;
+  ] each nip ;
 
 : reverse-vowels-2 ( str -- str' )
   [ clone ] [
@@ -249,8 +238,7 @@ IN: perlweekly
     1string upper?           ! str | vowel idx t/f
     swapd [ ch>upper ] when  ! str | idx vowel
     set-nth-of               ! str'
-  ] 2each                    ! str'
-;
+  ] 2each ;
 
 ! -- 255 --
 
@@ -266,8 +254,7 @@ IN: perlweekly
   ! [ >lower ] bi@
   swap ",.!:?" without
   split-words remove
-  mode
-;
+  mode ;
 
 ! -- 256 --
 ! Not sure I interpreted the task correctly
@@ -284,88 +271,73 @@ IN: perlweekly
     over reverse _ at min
   ] assoc-map
 
-  sum-values 2 /
-;
+  sum-values 2 / ;
 
 : merge-strings ( str1 str2 -- str )
   [ >array ] bi@
   zip-longest concat sift
-  >string
-;
+  >string ;
 
 ! -- 257 --
 
 : smaller-than-current ( ints -- n )
   dup [
     over [ over < ] count nip
-  ] map nip
-;
+  ] map nip ;
 
 MEMO: leading-1 ( row -- i/f )
   [ zero? not ] find  ! i/f n/f
   1 number=           ! i/f t/f
-  [ drop f ] unless   ! i/f
-;
+  [ drop f ] unless ;
 
 MEMO: all-zeros? ( seq -- ? )
-  [ zero? ] all?
-;
+  [ zero? ] all? ;
 
 : (rre-1?) ( m -- ? )
-  [ { [ all-zeros? ] [ leading-1 ] } || ] all?
-;
+  [ { [ all-zeros? ] [ leading-1 ] } || ] all? ;
 
 : (rre-2?) ( m -- ? )
   dup [ all-zeros? ] count
-  tail* [ all-zeros? ] all?
-;
+  tail* [ all-zeros? ] all? ;
 
 : (rre-3?) ( m -- ? )
   [
     [ leading-1 ] bi@
     2dup and [ < ] [ 2drop t ] if
-  ] monotonic?
-;
+  ] monotonic? ;
 
 : (rre-4?) ( m -- ? )
   [ [ leading-1 ] map-sift ]
   [ cols ]
   [ length 1 - ] tri  ! cols n
-  '[ [ zero? ] count _ number= ] all?
-;
+  '[ [ zero? ] count _ number= ] all? ;
 
 : reduced-row-echelon? ( m -- ? )
-  { [ (rre-1?) ] [ (rre-2?) ] [ (rre-3?) ] [ (rre-4?) ] } &&
-;
+  { [ (rre-1?) ] [ (rre-2?) ] [ (rre-3?) ] [ (rre-4?) ] } && ;
 
 ! -- 258 --
 
 : count-even-digits-number ( seq -- n )
-  [ log10 >integer odd? ] count
-;
+  [ log10 >integer odd? ] count ;
 
 MEMO: binary-rep-has-k-ones? ( int k -- ? )
-  swap 2 >base [ CHAR: 1 = ] count number=
-;
+  swap 2 >base [ CHAR: 1 = ] count number= ;
 
 : sum-of-values ( ints k -- n )
   [ dup length [0..b) ]
   [ '[ _ binary-rep-has-k-ones? ] ]
-  bi* filter nths-of sum
-;
+  bi* filter nths-of sum ;
 
 ! -- 259 --
 
 : banking-days ( start-date end-date weekday-exceptions -- n )
   [ [ weekdays-between ] 2keep ] dip  ! n start end | holidays
   -rot '[ _ _ between? ]              ! n holidays [within-dates?]
-  count -                             ! n
-;
+  count - ;
 
 : more-days-needed ( start end needed-workdays weekday-exceptions -- n )
   swap [ banking-days ] dip
-  swap -
-;
+  swap - ;
 
 : banking-day-offset ( ymd offset holidays -- ymd )
   [ ymd>timestamp ] map [ weekend? ] reject  ! ymd offset weekday-exceptions
@@ -376,8 +348,7 @@ MEMO: binary-rep-has-k-ones? ( int k -- ? )
 
   '[ 2dup @ dup zero? [ drop t ] [ days time+ f ] if ] [ ] until  ! start end'
 
-  nip timestamp>ymd
-;
+  nip timestamp>ymd ;
 
 ! TODO: part 2
 
@@ -385,14 +356,12 @@ MEMO: binary-rep-has-k-ones? ( int k -- ? )
 
 : unique-occurrences ( ints -- 1/0 )
   histogram values all-unique?
-  1 0 ?
-;
+  1 0 ? ;
 
 : dict-rank ( word -- n )
   >upper dup
   all-unique-permutations sort
-  index 1 +
-;
+  index 1 + ;
 
 ! -- 261 --
 
@@ -400,37 +369,32 @@ MEMO: binary-rep-has-k-ones? ( int k -- ? )
   [ sum ] [
     [ number>string ] map-concat
     [ 1string string>number ] map-sum
-  ] bi - abs
-;
+  ] bi - abs ;
 
 : multiply-by-two ( ints start -- n )
   dup zero? [ nip ] [
     2dup index*
     [ 2 * multiply-by-two ] [ nip ] if
-  ] if
-;
+  ] if ;
 
 ! -- 262 --
 
 : max-positive-negative ( ints -- n )
   [ neg? ] partition
   [ zero? ] reject
-  [ length ] bi@ max
-;
+  [ length ] bi@ max ;
 
 : (count-equal-divisible) ( i k ints -- n )  ! i k ints
     pick dupd nth-of                         ! i k ints ints[i]
     indices*                                 ! i k js
     pick '[ _ > ] filter                     ! i k js*
-    -rot '[ _ * _ divisor? ] count           ! n
-;
+    -rot '[ _ * _ divisor? ] count ;
 
 : count-equal-divisible ( ints k -- n )  ! ints k
   swap                                   ! k ints
   [ '[ _ _ (count-equal-divisible) ] ]
   [ length [0..b) ] bi                   ! ( i -- n ) range
-  swap map-sum
-;
+  swap map-sum ;
 
 ! -- 263 --
 
