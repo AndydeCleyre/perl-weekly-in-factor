@@ -447,10 +447,13 @@ MEMO: binary-rep-has-k-ones? ( int k -- ? )
 
 ! -- 264 --
 
+: great-letters ( str -- str' )
+  dup '[
+    { [ 1string upper? ] [ ch>lower _ in? ] } &&
+  ] filter ;
+
 : greatest-english-letter ( str -- str' )
-  dup [
-    { [ 1string upper? ] [ ch>lower over in? ] } &&
-  ] filter nip
+  great-letters
   dup empty? [ supremum 1string ] unless ;
 
 : target-array ( source indices -- target )
