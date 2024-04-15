@@ -420,3 +420,20 @@ MEMO: binary-rep-has-k-ones? ( int k -- ? )
 : target-array ( source indices -- target )
   [ V{ } clone ] 2dip
   [ pick insert-nth! ] 2each ;
+
+! -- 265 --
+
+: 33%-appearance ( ints -- n/f )
+  [ sorted-histogram ] [ length .33 * ] bi
+  '[ nip _ >= ] assoc-find 2drop ;
+
+: at-least? ( str char n -- ? )
+  -rot '[ _ = ] count <= ;
+
+: at-least-all? ( str histogram -- ? )
+  [ [ dupd ] dip at-least? ] assoc-all? nip ;
+
+: completing-word ( str completions -- smallest-completion )
+  swap >lower [ letter? ] filter histogram
+  '[ _ at-least-all? ] filter
+  [ "" ] [ shortest ] if-empty ;
