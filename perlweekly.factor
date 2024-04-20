@@ -431,7 +431,7 @@ MEMO: binary-rep-has-k-ones? ( int k -- ? )
   -rot '[ _ = ] count <= ;
 
 : at-least-all? ( str histogram -- ? )
-  [ [ dupd ] dip at-least? ] assoc-all? nip ;
+  [ [ dup ] 2dip at-least? ] assoc-all? nip ;
 
 : completing-word ( str completions -- smallest-completion )
   swap >lower [ letter? ] filter histogram
