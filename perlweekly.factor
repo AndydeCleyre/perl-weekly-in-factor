@@ -437,3 +437,30 @@ MEMO: binary-rep-has-k-ones? ( int k -- ? )
   swap >lower [ letter? ] filter histogram
   '[ _ at-least-all? ] filter
   [ "" ] [ shortest ] if-empty ;
+
+! -- 266 --
+
+: singles ( seq -- seq' )
+  histogram
+  [ nip 1 = ] assoc-filter
+  keys ;
+
+: uncommon-words ( line1 line2 -- seq )
+  [ split-words ] bi@
+  2dup swap
+  [ singles swap diff ] 2bi@ append
+  [ { "" } ] when-empty ;
+
+: nonzero-diagonals? ( m -- ? )
+  [ main-diagonal ] [ anti-diagonal ] bi
+  [ [ zero? ] none? ] bi@ and ;
+
+: zero-diagonals ( m -- m' )
+  [ 0 set-nth-of ] map-index
+  [ [ dup length 1 - ] dip - 0 set-nth-of ] map-index ;
+
+: x-matrix? ( m -- ? )
+  dup nonzero-diagonals? [
+    zero-diagonals
+    [ [ zero? ] all? ] all?
+  ] [ drop f ] if ;
