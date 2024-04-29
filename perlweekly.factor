@@ -472,18 +472,21 @@ MEMO: binary-rep-has-k-ones? ( int k -- ? )
   [ drop 0 ] [
     [ neg? ] count even?
     1 -1 ?
-  ] if
-;
+  ] if ;
 
-: line-counts ( str widths -- num-lines last-width )
-  '[ "abcdefghijklmnopqrstuvwxyz" index _ nth ] { } map-as
-  [ + ] 0accumulate
+: line-widths ( str-widths -- line-widths )
   { } clone swap
+  [ + ] 0accumulate
   [
     [ 100 > ] cut-when
     [ last ] dip
     over '[ _ - ] map
     [ suffix ] dip
-  ] until-empty
-  [ length ] [ last ] bi
-;
+  ] until-empty ;
+
+: str-widths ( str alphabet-widths -- str-widths )
+  '[ "abcdefghijklmnopqrstuvwxyz" index _ nth ] { } map-as ;
+
+: line-counts ( str alphabet-widths -- num-lines last-width )
+  str-widths line-widths
+  [ length ] [ last ] bi ;
