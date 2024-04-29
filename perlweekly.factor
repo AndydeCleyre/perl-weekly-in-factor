@@ -464,3 +464,26 @@ MEMO: binary-rep-has-k-ones? ( int k -- ? )
     zero-diagonals
     [ [ zero? ] all? ] all?
   ] [ drop f ] if ;
+
+! -- 267 --
+
+: product-sign ( ints -- -1/1/0 )
+  dup [ zero? ] any?
+  [ drop 0 ] [
+    [ neg? ] count even?
+    1 -1 ?
+  ] if
+;
+
+: line-counts ( str widths -- num-lines last-width )
+  '[ "abcdefghijklmnopqrstuvwxyz" index _ nth ] { } map-as
+  [ + ] 0accumulate
+  { } clone swap
+  [
+    [ 100 > ] cut-when
+    [ last ] dip
+    over '[ _ - ] map
+    [ suffix ] dip
+  ] until-empty
+  [ length ] [ last ] bi
+;
