@@ -475,7 +475,7 @@ MEMO: binary-rep-has-k-ones? ( int k -- ? )
   ] if ;
 
 : line-widths ( str-widths -- line-widths )
-  { } clone swap
+  { } swap
   [ + ] 0accumulate
   [
     [ 100 > ] cut-when
