@@ -485,7 +485,8 @@ MEMO: binary-rep-has-k-ones? ( int k -- ? )
   ] until-empty ;
 
 : str-widths ( str alphabet-widths -- str-widths )
-  '[ "abcdefghijklmnopqrstuvwxyz" index _ nth ] { } map-as ;
+  "abcdefghijklmnopqrstuvwxyz" swap zip
+  '[ _ at ] { } map-as ;
 
 : line-counts ( str alphabet-widths -- num-lines last-width )
   str-widths line-widths
