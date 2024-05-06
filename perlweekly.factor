@@ -491,3 +491,12 @@ MEMO: binary-rep-has-k-ones? ( int k -- ? )
 : line-counts ( str alphabet-widths -- num-lines last-width )
   str-widths line-widths
   [ length ] [ last ] bi ;
+
+! -- 268 --
+
+: magic-number ( seq-x seq-y -- n )
+  [ supremum ] bi@ swap - ;
+
+: number-game ( ints -- ints' )
+  sort 2 group
+  [ reverse ] map-concat ;
