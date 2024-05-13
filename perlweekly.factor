@@ -500,3 +500,24 @@ MEMO: binary-rep-has-k-ones? ( int k -- ? )
 : number-game ( ints -- ints' )
   sort 2 group
   [ reverse ] map-concat ;
+
+! -- 269 --
+
+: bitwise-or? ( ints -- t/f )
+  [ 0 bit? not ] count
+  2 >= ;
+
+: (d-e-prepare) ( ints -- vec-remaining vec1 vec2 )
+  2 cut swap
+  1 cut
+  [ >vector ] tri@ ;
+
+: distribute-elements ( ints -- ints' )
+  (d-e-prepare) 2dup '[ _ _ ] 3dip
+  '[
+    _ _
+    2dup [ last ] bi@ >
+    [ drop ] [ nip ] if
+    swap [ first ] [ 0 remove-nth-of! ] bi
+    [ suffix! drop ] dip
+  ] until-empty append ;
