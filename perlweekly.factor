@@ -507,17 +507,18 @@ MEMO: binary-rep-has-k-ones? ( int k -- ? )
   [ 0 bit? not ] count
   2 >= ;
 
-: (d-e-prepare) ( ints -- vec-remaining vec1 vec2 )
+: (d-e-prepare) ( ints -- remaining vec1 vec2 )
   2 cut swap
   1 cut
-  [ >vector ] tri@ ;
+  [ >vector ] bi@ ;
+
+: (d-e-which-seq) ( seq1 seq2 -- seq1/seq2 )
+  [ [ last ] bi@ > ] 2keep ? ;
 
 : distribute-elements ( ints -- ints' )
   (d-e-prepare) 2dup '[ _ _ ] 3dip
   '[
-    _ _
-    2dup [ last ] bi@ >
-    [ drop ] [ nip ] if
-    swap [ first ] [ 0 remove-nth-of! ] bi
-    [ suffix! drop ] dip
+    _ _ (d-e-which-seq)
+    [ unclip ] dip swap
+    suffix! drop
   ] until-empty append ;
