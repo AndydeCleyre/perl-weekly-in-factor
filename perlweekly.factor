@@ -545,15 +545,16 @@ MEMO: binary-rep-has-k-ones? ( int k -- ? )
   '[ _ < ] find-all [ first ] map
   2 ?cut drop ;
 
-: cheap-move ( ints x y -- ints' cost )
-  pick target-indices  ! ints x y indices
+: plan-level ( x y indices -- x/y indices' )
   dup length {
     { 0 [ 2nip 0 swap ] }
     { 1 [ nip ] }
-    [ drop 2over 2 / < [ 1 cut drop nip ] [ swapd nip ] if ]
-  } case               ! ints x/y indices
-  pick [ 1 + ] change-nths ;
+    { 2 [ 2over 2 / < [ 1 cut drop nip ] [ swapd nip ] if ] }
+  } case ;
 
+: cheap-move ( ints x y -- ints' cost )
+  pick target-indices plan-level  ! ints x/y indices'
+  pick [ 1 + ] change-nths ;
 
 : min-cost ( ints x y -- n )
   '[ _ _ cheap-move ]         ! ints cheap-move'
