@@ -516,9 +516,9 @@ MEMO: binary-rep-has-k-ones? ( int k -- ? )
   [ [ last ] bi@ > ] 2keep ? ;
 
 : distribute-elements ( ints -- ints' )
-  (d-e-prepare) 2dup '[ _ _ ] 3dip
-  '[
-    _ _ (d-e-which-seq)
-    [ unclip ] dip swap
+  (d-e-prepare)              ! remaining vec1 vec2
+  2dup '[ _ _ ] 3dip '[ _ _  ! vec1 vec2 remaining  | vec1 vec2
+    (d-e-which-seq)          ! vec1 vec2 remaining  | vec
+    [ unclip ] dip swap      ! vec1 vec2 remaining' | vec n
     suffix! drop
   ] until-empty append ;
