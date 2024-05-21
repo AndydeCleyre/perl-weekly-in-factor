@@ -522,3 +522,44 @@ MEMO: binary-rep-has-k-ones? ( int k -- ? )
     [ unclip ] dip swap      ! vec1 vec2 remaining' | vec n
     suffix! drop
   ] until-empty append ;
+
+! -- 270 --
+
+: special? ( i j m -- ? )
+  {
+    [ [ 2array ] dip matrix-nth 1 = ]
+    [ nip row [ 1 = ] count 1 = ]
+    [ swapd nip col [ 1 = ] count 1 = ]
+  } && ;
+
+: special-positions ( m -- n )
+  0 swap
+
+  [ dimension [ <iota> ] map first2 ]
+  [ '[ _ special? [ 1 + ] when ] ] bi
+
+  2nested-each ;
+
+: target-indices ( ints -- indices )
+  dup maximum
+  '[ _ < ] find-all [ first ] map
+  2 ?cut drop ;
+
+: cheap-move ( ints x y -- ints' cost )
+  pick target-indices  ! ints x y indices
+  dup length {
+    { 0 [ 2nip 0 swap ] }
+    { 1 [ nip ] }
+    [ drop 2over 2 / < [ 1 cut drop nip ] [ swapd nip ] if ]
+  } case               ! ints x/y indices
+  pick [ 1 + ] change-nths ;
+
+
+: min-cost ( ints x y -- n )
+  '[ _ _ cheap-move ]         ! ints cheap-move'
+  [ 0 ] 2dip                  ! cost ints cheap-move'
+  [ call '[ _ + ] dip ] keep  ! cost' ints' cheap-move'
+  pick swap '[                ! cost ints cost
+    drop @
+    dup '[ _ + ] 2dip
+  ] until-zero drop ;
