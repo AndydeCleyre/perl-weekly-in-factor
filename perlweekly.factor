@@ -564,3 +564,24 @@ MEMO: binary-rep-has-k-ones? ( int k -- ? )
     drop @
     dup '[ _ + ] 2dip
   ] until-zero drop ;
+
+! -- 271 --
+
+: maximum-ones ( matrix -- row-num )
+  [ sum ] map
+  [ maximum ] [ index ] bi
+  1 + ;
+
+: int-score ( int -- score )
+  >bin [ CHAR: 1 = ] count ;
+
+: int-compare ( int1 int2 -- <=> )
+  2dup [ int-score ] compare
+  {
+    { +lt+ [ 2drop +lt+ ] }
+    { +gt+ [ 2drop +gt+ ] }
+    { +eq+ [ <=> ] }
+  } case ;
+
+: sort-by-1bits ( ints -- ints' )
+  [ int-compare ] sort-with ;
