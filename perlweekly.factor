@@ -6,10 +6,12 @@ USING:
   grouping
   io
   kernel
-  math math.combinatorics math.functions math.matrices math.order math.parser math.statistics
+  math math.combinatorics math.functions math.matrices
+  math.order math.parser math.statistics
   prettyprint
   random ranges
-  sets sequences sequences.extras sequences.product sorting splitting strings
+  sets sequences sequences.extras sequences.product
+  sorting sorting.specification splitting strings
   unicode
   vectors
 ;
@@ -572,16 +574,8 @@ MEMO: binary-rep-has-k-ones? ( int k -- ? )
   [ maximum ] [ index ] bi
   1 + ;
 
-: int-score ( int -- score )
-  >bin [ CHAR: 1 = ] count ;
-
 : int-compare ( int1 int2 -- <=> )
-  2dup [ int-score ] compare
-  {
-    { +lt+ [ 2drop +lt+ ] }
-    { +gt+ [ 2drop +gt+ ] }
-    { +eq+ [ <=> ] }
-  } case ;
+  [ >bin [ CHAR: 1 = ] count ] compare ;
 
 : sort-by-1bits ( ints -- ints' )
-  [ int-compare ] sort-with ;
+  { { int-compare } { <=> } } sort-with-spec ;
