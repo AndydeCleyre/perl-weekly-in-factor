@@ -579,3 +579,12 @@ MEMO: binary-rep-has-k-ones? ( int k -- ? )
 
 : sort-by-1bits ( ints -- ints' )
   { { int-compare } { <=> } } sort-with-spec ;
+
+! -- 272 --
+
+: defrang ( ipv4 -- defranged )
+  "." "[.]" replace ;
+
+: string-score ( str -- n )
+  2 clump
+  [ first2 - abs ] map-sum ;
