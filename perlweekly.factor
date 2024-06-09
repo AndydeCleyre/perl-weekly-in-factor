@@ -582,7 +582,7 @@ MEMO: binary-rep-has-k-ones? ( int k -- ? )
 
 ! -- 272 --
 
-: defrang ( ipv4 -- defranged )
+: defang ( ipv4 -- defanged )
   "." "[.]" replace ;
 
 : string-score ( str -- n )
