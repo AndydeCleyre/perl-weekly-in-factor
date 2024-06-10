@@ -588,3 +588,13 @@ MEMO: binary-rep-has-k-ones? ( int k -- ? )
 : string-score ( str -- n )
   2 clump
   [ first2 - abs ] map-sum ;
+
+! -- 273 --
+
+: char-percentage ( str char -- n )
+  '[ _ = ] [ count ] keepd
+  length / 100 * round ;
+
+: b-after-a? ( str -- ? )
+  dup CHAR: b index*
+  dup [ swap CHAR: a index-from* not ] [ nip ] if ;
