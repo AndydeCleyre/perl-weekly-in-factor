@@ -597,3 +597,17 @@ MEMO: binary-rep-has-k-ones? ( int k -- ? )
 : b-after-a? ( str -- ? )
   dup CHAR: b index*
   dup [ swap CHAR: a index-from* not ] [ nip ] if ;
+
+! -- 274 --
+
+: >goat-latin ( sentence -- sentence' )
+  split-words
+  [
+    swap
+    dup first ch>lower vowel? [
+      unclip suffix
+    ] unless
+    "ma" append
+    swap 1 + CHAR: a <string> append
+  ] map-index " " join ;
+
