@@ -1,11 +1,13 @@
 USING:
   arrays assocs assocs.extras
   calendar calendar.format calendar.parser
+  circular
   combinators combinators.short-circuit.smart
   english
   grouping
   io
   kernel
+  literals
   math math.combinatorics math.functions math.matrices
   math.order math.parser math.statistics
   prettyprint
@@ -611,3 +613,27 @@ MEMO: binary-rep-has-k-ones? ( int k -- ? )
     swap 1 + CHAR: a <string> append
   ] map-index " " join ;
 
+! TODO: part 2
+
+! -- 275 --
+
+: broken-keys ( sentence keys -- n )
+  [ >lower ] bi@
+  swap split-words
+  [ intersects? not ] with count ;
+
+CONSTANT: letters $[ CHAR: a CHAR: z [a..b] <circular> ]
+
+: ch+ ( n ch -- ch' )
+  letters index +
+  letters nth ;
+
+: replace-digits ( str -- str' )
+  >lower
+  [ dup [ digit? ] find dup ]
+  [
+    1string string>number
+    2over 1 - nth-of
+    ch+
+    set-nth-of
+  ] while 2drop ;
