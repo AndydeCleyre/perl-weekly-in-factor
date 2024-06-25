@@ -622,6 +622,8 @@ MEMO: binary-rep-has-k-ones? ( int k -- ? )
   swap split-words
   [ intersects? not ] with count ;
 
+! TODO: I misunderstood part 2. Redo it!
+
 CONSTANT: letters $[ CHAR: a CHAR: z [a..b] <circular> ]
 
 : ch+ ( n ch -- ch' )
