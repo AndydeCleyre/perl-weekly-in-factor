@@ -622,20 +622,20 @@ MEMO: binary-rep-has-k-ones? ( int k -- ? )
   swap split-words
   [ intersects? not ] with count ;
 
-! TODO: I misunderstood part 2. Redo it!
-
 CONSTANT: letters $[ CHAR: a CHAR: z [a..b] <circular> ]
 
 : ch+ ( n ch -- ch' )
   letters index +
   letters nth ;
 
+: prev-letter ( str i -- ch )
+  head [ letter? ] find-last nip ;
+
 : replace-digits ( str -- str' )
-  >lower
-  [ dup [ digit? ] find dup ]
+  >lower dup
   [
-    1string string>number
-    2over 1 - nth-of
-    ch+
-    set-nth-of
-  ] while 2drop ;
+    over digit? [
+      pick swap prev-letter
+      [ 1string string>number ] dip ch+
+    ] [ drop ] if
+  ] map-index nip ;
