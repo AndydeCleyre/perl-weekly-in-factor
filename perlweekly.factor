@@ -639,3 +639,9 @@ CONSTANT: letters $[ CHAR: a CHAR: z [a..b] <circular> ]
       [ 1string string>number ] dip ch+
     ] [ drop ] if
   ] map-index nip ;
+
+! -- 276 --
+
+: complete-days ( hours -- n )
+  2 all-combinations
+  [ first2 - 24 divisor? ] count ;
