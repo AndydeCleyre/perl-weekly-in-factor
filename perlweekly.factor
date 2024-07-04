@@ -645,3 +645,8 @@ CONSTANT: letters $[ CHAR: a CHAR: z [a..b] <circular> ]
 : complete-days ( hours -- n )
   2 all-combinations
   [ first2 - 24 divisor? ] count ;
+
+: maximum-frequency ( ints -- n )
+  histogram values
+  dup maximum
+  '[ _ = ] filter sum ;
