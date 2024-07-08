@@ -5,6 +5,7 @@ USING:
   combinators combinators.short-circuit.smart
   english
   grouping
+  hash-sets
   io
   kernel
   literals
@@ -650,3 +651,25 @@ CONSTANT: letters $[ CHAR: a CHAR: z [a..b] <circular> ]
   histogram values
   dup maximum
   '[ _ = ] filter sum ;
+
+! -- 277 --
+
+: count-common ( words1 words2 -- n )
+  [
+    histogram
+    [ 1 = ] filter-values
+    keys
+  ] bi@
+  intersect length ;
+
+: strong-pairs ( ints -- n )
+  2 all-combinations
+  [ cardinality 1 = ] reject
+  [ >hash-set ] map
+  >hash-set members
+  [ members ] map
+  [
+    [ first2 - abs ]
+    [ minimum ]
+    bi <
+  ] count ;
