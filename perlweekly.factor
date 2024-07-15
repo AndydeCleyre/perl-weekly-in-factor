@@ -673,3 +673,26 @@ CONSTANT: letters $[ CHAR: a CHAR: z [a..b] <circular> ]
     [ minimum ]
     bi <
   ] count ;
+
+! -- 278 --
+
+: sort-string ( shuffled -- sorted )
+  ! Assumes no earlier "stray" digits in words
+  split-words
+  [
+    [ digit? ] cut-when
+    string>number
+    2array
+  ] map
+  sort-values
+  keys
+  " " join
+;
+
+: reverse-word ( word char -- reversed )
+  2dup swap in? [
+    1string [ split1 ] keep
+    '[ _ append sort ] dip
+    "" append-as
+  ] [ drop ] if
+;
