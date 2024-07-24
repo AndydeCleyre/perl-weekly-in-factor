@@ -696,3 +696,13 @@ CONSTANT: letters $[ CHAR: a CHAR: z [a..b] <circular> ]
     "" append-as
   ] [ drop ] if
 ;
+
+! -- 279 --
+
+: sort-letters ( letters weights -- letters' )
+  zip sort-values keys >string ;
+
+: split-string? ( str -- ? )
+  >lower [ vowel? ] count even? ;
+
+! does 'y' count? Let's say no, for now.
