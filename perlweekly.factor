@@ -706,3 +706,14 @@ CONSTANT: letters $[ CHAR: a CHAR: z [a..b] <circular> ]
   >lower [ vowel? ] count even? ;
 
 ! does 'y' count? Let's say no, for now.
+
+! -- 280 --
+
+: twice-appearance ( str -- char )
+  dup members >array
+  [ over indices ?second ] map
+  ?minimum nth-of ;
+
+: count-asterisks ( str -- n )
+  "|" split <evens> concat
+  [ CHAR: * = ] count ;
