@@ -9,8 +9,10 @@ USING:
   io
   kernel
   literals
+  make
   math math.combinatorics math.functions math.matrices
-  math.order math.parser math.statistics
+  math.order math.parser math.statistics math.vectors
+  path-finding
   prettyprint
   random ranges
   sets sequences sequences.extras sequences.product
