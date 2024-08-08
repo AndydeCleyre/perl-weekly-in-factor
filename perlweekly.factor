@@ -717,3 +717,40 @@ CONSTANT: letters $[ CHAR: a CHAR: z [a..b] <circular> ]
 : count-asterisks ( str -- n )
   "|" split <evens> concat
   [ CHAR: * = ] count ;
+
+! -- 281 --
+
+: square-is-light? ( str -- ? )
+  sum odd? ;
+
+CONSTANT: chess-indices $[
+  7 [0..b] dup 2array <product-sequence>
+]
+
+CONSTANT: knight-moves $[
+  { 1 -1 } 2 all-selections
+  [ { 2 1 } v* ] map
+  dup [ reverse ] map append
+]
+
+: knight-neighbors ( pair -- neighbor-pairs )
+  knight-moves [ v+ ] with map
+  chess-indices intersect ;
+
+CONSTANT: all-knight-neighbors $[
+  [
+    chess-indices [ [ knight-neighbors ] keep ,, ] each
+  ] H{ } make
+]
+
+CONSTANT: knight-bfs $[
+  all-knight-neighbors <bfs>
+]
+
+: pos>row-col ( str -- pair )
+  [ last 49 - ] [ first 97 - ] bi 2array ;
+
+: knight-min-moves ( startpos endpos -- n )
+  [ pos>row-col ] bi@
+  knight-bfs find-path
+  length 1 - ;
