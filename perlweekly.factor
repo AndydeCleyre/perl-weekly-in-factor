@@ -625,11 +625,11 @@ MEMO: binary-rep-has-k-ones? ( int k -- ? )
   swap split-words
   [ intersects? not ] with count ;
 
-CONSTANT: letters $[ CHAR: a CHAR: z [a..b] <circular> ]
+CONSTANT: LETTERS $[ CHAR: a CHAR: z [a..b] <circular> ]
 
 : ch+ ( n ch -- ch' )
-  letters index +
-  letters nth ;
+  LETTERS index +
+  LETTERS nth ;
 
 : prev-letter ( str i -- ch )
   head [ letter? ] find-last nip ;
@@ -725,28 +725,28 @@ CONSTANT: letters $[ CHAR: a CHAR: z [a..b] <circular> ]
 : square-is-light? ( str -- ? )
   sum odd? ;
 
-CONSTANT: chess-indices $[
+CONSTANT: CHESS-INDICES $[
   7 [0..b] dup 2array <product-sequence>
 ]
 
-CONSTANT: knight-moves $[
+CONSTANT: KNIGHT-MOVES $[
   { 1 -1 } 2 all-selections
   [ { 2 1 } v* ] map
   dup [ reverse ] map append
 ]
 
 : knight-neighbors ( pair -- neighbor-pairs )
-  knight-moves [ v+ ] with map
-  chess-indices intersect ;
+  KNIGHT-MOVES [ v+ ] with map
+  CHESS-INDICES intersect ;
 
-CONSTANT: all-knight-neighbors $[
+CONSTANT: ALL-KNIGHT-NEIGHBORS $[
   [
-    chess-indices [ [ knight-neighbors ] keep ,, ] each
+    CHESS-INDICES [ [ knight-neighbors ] keep ,, ] each
   ] H{ } make
 ]
 
-CONSTANT: knight-bfs $[
-  all-knight-neighbors <bfs>
+CONSTANT: KNIGHT-BFS $[
+  ALL-KNIGHT-NEIGHBORS <bfs>
 ]
 
 : pos>row-col ( str -- pair )
@@ -754,5 +754,5 @@ CONSTANT: knight-bfs $[
 
 : knight-min-moves ( startpos endpos -- n )
   [ pos>row-col ] bi@
-  knight-bfs find-path
+  KNIGHT-BFS find-path
   length 1 - ;
