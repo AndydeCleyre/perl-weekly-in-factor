@@ -4,7 +4,7 @@ USING:
   circular
   combinators combinators.short-circuit.smart
   english
-  grouping
+  grouping grouping.extras
   hash-sets
   io
   kernel
@@ -756,3 +756,15 @@ CONSTANT: KNIGHT-BFS $[
   [ pos>row-col ] bi@
   KNIGHT-BFS find-path
   length 1 - ;
+
+! -- 282 --
+
+: good-integer ( int -- str/-1 )
+  number>string
+  [ ] group-by
+  [ second ] map
+  [ length 3 = ] find nip
+  dup [ >string ] [ drop -1 ] if ;
+
+: changing-keys ( str -- n )
+  [ ch>lower ] group-by length 1 - ;
