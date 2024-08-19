@@ -768,3 +768,13 @@ CONSTANT: KNIGHT-BFS $[
 
 : changing-keys ( str -- n )
   [ ch>lower ] group-by length 1 - ;
+
+! -- 283 --
+
+: unique-number ( ints -- n )
+  sorted-histogram first first ;
+
+: digit-count-value? ( ints -- ? )
+  dup length [0..b)
+  [ dupd '[ _ = ] count ] map
+  sequence= ;
