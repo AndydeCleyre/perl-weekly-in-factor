@@ -778,3 +778,22 @@ CONSTANT: KNIGHT-BFS $[
   dup length [0..b)
   [ dupd '[ _ = ] count ] map
   sequence= ;
+
+! -- 284 --
+
+: lucky-integer ( ints -- n )
+  histogram
+  [ = ] assoc-filter keys
+  [ -1 ] [ maximum ] if-empty ;
+
+:: (cmp-relative-sort) ( a b list2 -- <=> )
+  a b [ list2 in? ] bi@ 2array
+  {
+    { { t t } [ a b [ list2 index ] bi@ <=> ] }
+    { { t f } [ +lt+ ] }
+    { { f t } [ +gt+ ] }
+    { { f f } [ a b <=> ] }
+  } case ;
+
+: relative-sort ( list1 list2 -- list1' )
+  '[ _ (cmp-relative-sort) ] sort-with ;
