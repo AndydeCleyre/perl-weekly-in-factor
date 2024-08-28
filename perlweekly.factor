@@ -786,13 +786,13 @@ CONSTANT: KNIGHT-BFS $[
   [ = ] assoc-filter keys
   [ -1 ] [ maximum ] if-empty ;
 
-:: (cmp-relative-sort) ( a b list2 -- <=> )
-  a b [ list2 in? ] bi@ 2array
+: (cmp-relative-sort) ( a b list2 -- <=> )
+  3dup '[ _ in? ] bi@ 2array
   {
-    { { t t } [ a b [ list2 index ] bi@ <=> ] }
-    { { t f } [ +lt+ ] }
-    { { f t } [ +gt+ ] }
-    { { f f } [ a b <=> ] }
+    { { t t } [ '[ _ index ] bi@ <=> ] }
+    { { t f } [ 3drop +lt+ ] }
+    { { f t } [ 3drop +gt+ ] }
+    { { f f } [ drop <=> ] }
   } case ;
 
 : relative-sort ( list1 list2 -- list1' )
