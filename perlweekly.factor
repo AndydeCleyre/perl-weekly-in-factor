@@ -797,3 +797,22 @@ CONSTANT: KNIGHT-BFS $[
 
 : relative-sort ( list1 list2 -- list1' )
   '[ _ (cmp-relative-sort) ] sort-with ;
+
+! -- 285 --
+
+: no-connection ( routes -- dead-end )
+  [ values ] [ keys ] bi diff first ;
+
+: (making-change) ( amount denoms -- waycount )
+  {
+    { [ over 0 < ] [ 2drop 0 ] }
+    { [ over zero? ] [ 2drop 1 ] }
+    { [ dup last 1 = ] [ 2drop 1 ] }
+    [
+      [ dup last '[ _ - ] dip ] [ but-last ] 2bi
+      [ (making-change) ] 2bi@ +
+    ]
+  } cond ;
+
+: making-change ( amount -- waycount )
+  { 1 5 10 25 50 } (making-change) ;
