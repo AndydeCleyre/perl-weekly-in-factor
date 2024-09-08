@@ -803,15 +803,18 @@ CONSTANT: KNIGHT-BFS $[
 : no-connection ( routes -- dead-end )
   [ values ] [ keys ] bi diff first ;
 
+DEFER: (making-change)
+
+: (ways-with-and-without-largest-denom) ( amount denoms -- waycount )
+  [ dup last '[ _ - ] dip ] [ but-last ] 2bi
+  [ (making-change) ] 2bi@ + ;
+
 : (making-change) ( amount denoms -- waycount )
   {
     { [ over 0 < ] [ 2drop 0 ] }
     { [ over zero? ] [ 2drop 1 ] }
     { [ dup last 1 = ] [ 2drop 1 ] }
-    [
-      [ dup last '[ _ - ] dip ] [ but-last ] 2bi
-      [ (making-change) ] 2bi@ +
-    ]
+    [ (ways-with-and-without-largest-denom) ]
   } cond ;
 
 : making-change ( amount -- waycount )
