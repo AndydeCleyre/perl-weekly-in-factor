@@ -828,8 +828,8 @@ DEFER: (making-change)
   " \n" split harvest random ;
 
 : order-game ( ints -- n )
-  2 group
-  dup length 1 = [ first minimum ] [
+  dup length 2 = [ minimum ] [
+    2 group
     [ <evens> [ minimum ] map ]
     [ <odds> [ maximum ] map ] bi
     zip concat order-game
