@@ -6,7 +6,7 @@ USING:
   english
   grouping grouping.extras
   hash-sets
-  io
+  io io.streams.string
   kernel
   literals
   make
@@ -15,6 +15,7 @@ USING:
   path-finding
   prettyprint
   random ranges
+  see
   sets sequences sequences.extras sequences.product
   sorting sorting.specification splitting strings
   unicode
@@ -819,3 +820,17 @@ DEFER: (making-change)
 
 : making-change ( amount -- waycount )
   { 1 5 10 25 50 } (making-change) ;
+
+! -- 286 --
+
+: self-spammer ( -- str )
+  [ \ self-spammer see ] with-string-writer
+  " \n" split harvest random ;
+
+: order-game ( ints -- n )
+  2 group
+  dup length 1 = [ first minimum ] [
+    [ <evens> [ minimum ] map ]
+    [ <odds> [ maximum ] map ] bi
+    zip concat order-game
+  ] if ;
