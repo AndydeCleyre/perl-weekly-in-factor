@@ -726,9 +726,11 @@ CONSTANT: LETTERS $[ CHAR: a CHAR: z [a..b] <circular> ]
 : square-is-light? ( str -- ? )
   sum odd? ;
 
+<<
 CONSTANT: CHESS-INDICES $[
   7 [0..b] dup 2array <product-sequence>
 ]
+>>
 
 CONSTANT: KNIGHT-MOVES $[
   { 1 -1 } 2 all-selections
@@ -736,15 +738,19 @@ CONSTANT: KNIGHT-MOVES $[
   dup [ reverse ] map append
 ]
 
+<<
 : knight-neighbors ( pair -- neighbor-pairs )
   KNIGHT-MOVES [ v+ ] with map
   CHESS-INDICES intersect ;
+>>
 
+<<
 CONSTANT: ALL-KNIGHT-NEIGHBORS $[
   [
     CHESS-INDICES [ [ knight-neighbors ] keep ,, ] each
   ] H{ } make
 ]
+>>
 
 CONSTANT: KNIGHT-BFS $[
   ALL-KNIGHT-NEIGHBORS <bfs>
