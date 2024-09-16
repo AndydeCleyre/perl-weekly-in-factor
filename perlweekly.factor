@@ -2,7 +2,7 @@ USING:
   arrays assocs assocs.extras
   calendar calendar.format calendar.parser
   circular
-  combinators combinators.short-circuit.smart
+  combinators combinators.extras combinators.short-circuit.smart
   english
   grouping grouping.extras
   hash-sets
@@ -14,7 +14,7 @@ USING:
   math.order math.parser math.statistics math.vectors
   path-finding
   prettyprint
-  random ranges
+  random ranges regexp
   see
   sets sequences sequences.extras sequences.product
   sorting sorting.specification splitting strings
@@ -840,3 +840,29 @@ DEFER: (making-change)
     [ <odds> [ maximum ] map ] bi
     zip concat order-game
   ] if ;
+
+! -- 287 --
+
+: length-corrections ( str -- n )
+  length 6 swap - 0 max ;
+
+: diversity-corrections ( str -- n )
+  {
+    [ [ letter? ] none? ]
+    [ [ LETTER? ] none? ]
+    [ [ digit? ] none? ]
+  } cleave-array [ ] count ;
+
+: streak-corrections ( str -- n )
+  [ ] group-by values
+  [ length 3 /i ] map-sum ;
+
+: min-password-steps ( str -- n )
+  {
+    [ length-corrections ]
+    [ diversity-corrections over - 0 max ]
+    [ streak-corrections over - 0 max ]
+  } cleave-array sum ;
+
+: valid-number? ( str -- ? )
+  R/ [-\+]?(\d+\.?\d*|\.\d+)([eE][-\+]?\d+)?/ matches? ;
