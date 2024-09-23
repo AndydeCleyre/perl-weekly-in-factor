@@ -872,10 +872,16 @@ DEFER: (making-change)
 : palindrome? ( str -- ? )
   dup reverse = ;
 
+: widen ( m n -- m-- n++ )
+  [ 1 - ] [ 1 + ] bi* ;
+
+: palindromic-numbers ( integers -- strings )
+  [ number>string ] [ palindrome? ] map-filter ;
+
 : closest-palindrome ( str -- str' )
   string>number dup { }
   [ dup empty? ] [
-    drop [ 1 - ] [ 1 + ] bi*
-    2dup 2array [ number>string ] [ palindrome? ] map-filter
+    drop widen
+    2dup 2array palindromic-numbers
   ] do while
   2nip first ;
