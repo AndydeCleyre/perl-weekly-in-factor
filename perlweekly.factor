@@ -879,4 +879,4 @@ DEFER: (making-change)
     drop [ 1 - ] [ 1 + ] bi*
     2dup 2array [ number>string ] [ palindrome? ] map-filter
   ] do while 2nip
-  swap '[ string>number _ - abs ] minimum-by ;
+  [ string>number - abs ] with minimum-by ;
