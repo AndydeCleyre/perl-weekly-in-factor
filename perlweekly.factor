@@ -873,10 +873,9 @@ DEFER: (making-change)
   dup reverse = ;
 
 : closest-palindrome ( str -- str' )
-  string>number
-  dup dup { }
+  string>number dup { }
   [ dup empty? ] [
     drop [ 1 - ] [ 1 + ] bi*
     2dup 2array [ number>string ] [ palindrome? ] map-filter
-  ] do while 2nip
-  [ string>number - abs ] with minimum-by ;
+  ] do while
+  2nip first ;
