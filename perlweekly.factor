@@ -866,3 +866,17 @@ DEFER: (making-change)
 
 : valid-number? ( str -- ? )
   R/ [-\+]?(\d+\.?\d*|\.\d+)([eE][-\+]?\d+)?/ matches? ;
+
+! -- 288 --
+
+: palindrome? ( str -- ? )
+  dup reverse = ;
+
+: closest-palindrome ( str -- str' )
+  string>number
+  dup dup { }
+  [ dup empty? ] [
+    drop [ 1 - ] [ 1 + ] bi*
+    2dup 2array [ number>string ] [ palindrome? ] map-filter
+  ] do while 2nip
+  swap '[ string>number _ - abs ] minimum-by ;
