@@ -978,13 +978,20 @@ PRIVATE>
   2 over ?nth
   dup [ nip ] [ drop maximum ] if ;
 
+<PRIVATE
+
+: jumble ( letters -- ltetres )
+  1 cut 1 cut*
+  [ randomize ] dip
+  3append ;
+
+PRIVATE>
+
 : jumbled-letters ( str -- str' )
   split-words [
     dup [ Letter? ] count 3 > [
-      [ [ Letter? not ] find-all ] keep [ Letter? ] filter
-      1 cut 1 cut*
-      [ randomize ] dip
-      3append
-      swap [ spin insert-nth ] assoc-each
+      [ [ Letter? ] filter jumble ]
+      [ [ Letter? not ] find-all ] bi
+      [ spin insert-nth ] assoc-each
     ] when
   ] map " " join ;
