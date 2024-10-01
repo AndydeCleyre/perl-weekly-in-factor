@@ -970,3 +970,22 @@ PRIVATE>
     [ interval>> interval-length ]
     filter-map sum
   ] assoc-map values maximum 2nip ;
+
+! -- 289 --
+
+: third-maximum ( ints -- n )
+  members inv-sort
+  2 over ?nth
+  dup [ nip ] [ drop maximum ] if ;
+
+! TODO: jumbled-letters: punctuation must "stay the same"
+
+: jumbled-letters ( str -- str' )
+  split-words
+  [
+    dup length 2 > [
+      1 cut 1 cut*
+      [ randomize ] dip
+      3append
+    ] when
+  ] map " " join ;
