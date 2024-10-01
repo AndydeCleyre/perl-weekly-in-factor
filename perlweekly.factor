@@ -869,6 +869,8 @@ DEFER: (making-change)
 
 ! -- 288 --
 
+<PRIVATE
+
 : palindrome? ( str -- ? )
   dup reverse = ;
 
@@ -878,6 +880,8 @@ DEFER: (making-change)
 : palindromic-numbers ( integers -- strings )
   [ number>string ] [ palindrome? ] map-filter ;
 
+PRIVATE>
+
 : closest-palindrome ( str -- str' )
   string>number dup { }
   [ dup empty? ] [
@@ -885,3 +889,84 @@ DEFER: (making-change)
     2dup 2array palindromic-numbers
   ] do while
   2nip first ;
+
+! My part two is too complicated,
+! I must be missing a much simpler approach.
+
+<PRIVATE
+
+: row>row-streaks ( strings -- pairs )
+! { "x" "x" "x" "o" "o" } --
+! { { "x" 3 } { "o" 2 } }
+  [ ] group-by
+  [ dup [ length ] change-last ] map ;
+
+: 1st-row-streak>row-interval ( row-streak -- row-interval )
+! { "x" 3 } --
+! { "x" [0,3) }
+  dup [ [0,b) ] change-last ;
+
+: row-streak>row-interval ( prev-row-interval row-streak -- row-interval )
+! { "x" [0,3) } { "o" 2 } --
+! { "o" [3,5) }
+  [
+    [ second to>> first ]
+    [ [ dupd + [a,b) ] with change-last ]
+    bi*
+  ] keep ;
+
+: row-streaks>row-intervals ( pairs -- pairs' )
+! { { "x" 3 } { "o" 2 } } --
+! { { "x" [0,3) } { "o" [3,5) } }
+  unclip 1st-row-streak>row-interval
+  [
+    [ row-streak>row-interval ] accumulate*
+  ] keep prefix ;
+
+: row-interval-matrix ( m[string] -- m[row-interval] )
+! { { "x" "x" "x" "o" "o" } ... } --
+! { { { "x" [0,3) } { "o" [3,5) } } ... }
+  [
+    row>row-streaks
+    row-streaks>row-intervals
+  ] map ;
+
+TUPLE: Span row string interval ;
+
+: all-spans ( m -- spans )
+! { { "x" "x" "x" "o" "o" } ... } --
+! { T{ 0 "x" [0,3) } ... }
+  row-interval-matrix [
+    drop
+    [ Span new ] dip >>row
+    swap [ first >>string ] [ second >>interval ] bi
+  ] matrix-map-index concat ;
+
+: span-neighbor? ( span1 span2 -- ? )
+  [ [ row>> ] [ string>> ] [ interval>> ] tri 3array ] bi@
+  {
+    [ [ first ] bi@ - abs 1 = ]
+    [ [ second ] bi@ = ]
+    [ [ third ] bi@ intervals-intersect? ]
+  } && ;
+
+: all-neighbors ( m -- neighbors )
+! { { "x" "x" "x" "o" "o" } ... } --
+! H{ { T{ 0 "x" [0,3) } { T{...} ... } } ... }
+  all-spans dup [
+    [
+      dupd [ '[ _ span-neighbor? ] filter ] keep ,,
+    ] each
+  ] H{ } make nip ;
+
+PRIVATE>
+
+: contiguous-block ( m -- n )
+  all-neighbors               ! neighs
+  [ keys ] [ <bfs> ] [ ] tri  ! spans bfs neighs
+  [                           ! spans bfs | target val
+    drop pick over reach      ! spans bfs | target spans target bfs
+    '[ _ _ find-path ]
+    [ interval>> interval-length ]
+    filter-map sum
+  ] assoc-map values maximum 2nip ;
