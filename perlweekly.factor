@@ -1,5 +1,5 @@
 USING:
-  arrays assocs assocs.extras
+  accessors arrays assocs assocs.extras
   calendar calendar.format calendar.parser
   circular
   combinators combinators.extras combinators.short-circuit.smart
@@ -10,7 +10,7 @@ USING:
   kernel
   literals
   make
-  math math.combinatorics math.functions math.matrices
+  math math.combinatorics math.functions math.intervals math.matrices
   math.order math.parser math.statistics math.vectors
   path-finding
   prettyprint
@@ -978,14 +978,13 @@ PRIVATE>
   2 over ?nth
   dup [ nip ] [ drop maximum ] if ;
 
-! TODO: jumbled-letters: punctuation must "stay the same"
-
 : jumbled-letters ( str -- str' )
-  split-words
-  [
-    dup length 2 > [
+  split-words [
+    dup [ Letter? ] count 3 > [
+      [ [ Letter? not ] find-all ] keep [ Letter? ] filter
       1 cut 1 cut*
       [ randomize ] dip
       3append
+      swap [ spin insert-nth ] assoc-each
     ] when
   ] map " " join ;
