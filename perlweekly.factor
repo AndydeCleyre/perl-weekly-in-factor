@@ -19,7 +19,7 @@ USING:
   sets sequences sequences.extras sequences.product
   sorting sorting.specification splitting strings
   unicode
-  vectors
+  validators vectors
 ;
 IN: perlweekly
 
@@ -1003,3 +1003,6 @@ PRIVATE>
 : double-exist? ( ints -- ? )
   dup '[ 2 * _ in? ] filter
   { [ empty? ] [ { 0 } = ] } || not ;
+
+: luhn-algo? ( str -- ? )
+  [ digit? ] filter luhn? ;
