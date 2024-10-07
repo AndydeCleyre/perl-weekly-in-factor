@@ -997,3 +997,9 @@ PRIVATE>
     dup [ Letter? ] count 3 >
     [ jumble-preserve-punctuation ] when
   ] map " " join ;
+
+! -- 290 --
+
+: double-exist? ( ints -- ? )
+  dup '[ 2 * _ in? ] filter
+  { [ empty? ] [ { 0 } = ] } || not ;
