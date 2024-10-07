@@ -974,9 +974,9 @@ PRIVATE>
 ! -- 289 --
 
 : third-maximum ( ints -- n )
-  members inv-sort
-  2 over ?nth
-  dup [ nip ] [ drop maximum ] if ;
+  members
+  dup length 2 >
+  [ inv-sort 2 nth-of ] [ maximum ] if ;
 
 <PRIVATE
 
