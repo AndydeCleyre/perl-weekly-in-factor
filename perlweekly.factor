@@ -985,13 +985,15 @@ PRIVATE>
   [ randomize ] dip
   3append ;
 
+: jumble-preserve-punctuation ( l.ett,ers -- l.tet,res )
+  [ [ Letter? ] filter jumble ]
+  [ [ Letter? not ] find-all ] bi
+  [ spin insert-nth ] assoc-each ;
+
 PRIVATE>
 
 : jumbled-letters ( str -- str' )
   split-words [
-    dup [ Letter? ] count 3 > [
-      [ [ Letter? ] filter jumble ]
-      [ [ Letter? not ] find-all ] bi
-      [ spin insert-nth ] assoc-each
-    ] when
+    dup [ Letter? ] count 3 >
+    [ jumble-preserve-punctuation ] when
   ] map " " join ;
