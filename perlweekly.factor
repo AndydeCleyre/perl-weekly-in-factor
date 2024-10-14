@@ -1013,11 +1013,7 @@ PRIVATE>
 <PRIVATE
 
 : lr-sums ( seq i -- leftsum rightsum )
-  {
-    { 0 [ rest sum 0 swap ] }
-    { [ over length 1 - ] [ but-last sum 0 ] }
-    [ cut rest [ sum ] bi@ ]
-  } case ;
+  cut rest [ sum ] bi@ ;
 
 PRIVATE>
 
