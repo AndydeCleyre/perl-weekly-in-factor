@@ -892,6 +892,7 @@ PRIVATE>
 
 ! My part two is too complicated,
 ! I must be missing a much simpler approach.
+! TODO: try redoing this with the graphs vocab?
 
 <PRIVATE
 
@@ -1006,3 +1007,21 @@ PRIVATE>
 
 : luhn-algo? ( str -- ? )
   [ digit? ] filter luhn? ;
+
+! -- 291 --
+
+<PRIVATE
+
+: lr-sums ( seq i -- leftsum rightsum )
+  {
+    { 0 [ rest sum 0 swap ] }
+    { [ over length 1 - ] [ but-last sum 0 ] }
+    [ cut rest [ sum ] bi@ ]
+  } case ;
+
+PRIVATE>
+
+: middle-index ( seq -- i/-1 )
+  dup length <iota>
+  [ dupd lr-sums = ] find 2nip
+  dup [ drop -1 ] unless ;
