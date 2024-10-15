@@ -1080,7 +1080,7 @@ CONSTANT: all-hands $[ deck 5 all-combinations ]
   histogram values maximum 2 = ;
 
 : tally-and-reject ( tallies hands quot: ( hand -- ? ) -- tallies' hands' )
-  partition
+  [ partition ] call( hands checker -- yes-hands no-hands )
   [ length suffix ] dip ; inline
 
 PRIVATE>
@@ -1100,7 +1100,7 @@ MEMO: poker-hand-rankings-2 ( -- counts )
     [ two-pair? ]
     [ one-pair? ]
     [ drop t ]
-  } [ [ tally-and-reject ] call( x y z -- x' y' ) ] each drop ;
+  } [ tally-and-reject ] each drop ;
 
 : poker-hand-rankings-3 ( -- )
   poker-hand-rankings-1
