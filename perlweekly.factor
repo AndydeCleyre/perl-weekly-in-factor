@@ -1021,3 +1021,88 @@ PRIVATE>
   dup length <iota>
   [ dupd lr-sums = ] find 2nip
   dup [ drop -1 ] unless ;
+
+<PRIVATE
+
+<<
+TUPLE: card rank suit ;
+C: <card> card
+
+CONSTANT: ranks $[ { "A" "J" "Q" "K" } 2 10 [a..b] [ number>string ] map append ]
+CONSTANT: suits { "♠" "♥" "♣" "♦" }
+>>
+
+<<
+CONSTANT: deck $[ ranks suits '{ _ _ } [ first2 <card> ] product-map ]
+>>
+
+CONSTANT: all-hands $[ deck 5 all-combinations ]
+
+: ranks>alternative-numeric-ranks ( ranks -- seq[seq[int]] )
+  [
+    dup string>number
+    [ nip ] [
+      { { "J" [ 11 ] } { "Q" [ 12 ] } { "K" [ 13 ] } { "A" [ "A" ] } } case
+    ] if*
+  ] map
+  "A" over in? [
+    [ { "A" } { 1 } replace ] [ { "A" } { 14 } replace ] bi 2array
+  ] [ 1array ] if ;
+
+: flush? ( cards -- ? )
+  [ suit>> ] map cardinality 1 = ;
+
+: straight? ( cards -- ? )
+  [ rank>> ] map ranks>alternative-numeric-ranks
+  [ sort [ - abs 1 = ] monotonic? ] any? ;
+
+: straight-flush? ( cards -- ? )
+  { [ flush? ] [ straight? ] } && ;
+
+: four-of-a-kind? ( cards -- ? )
+  [ rank>> ] map
+  histogram values maximum 4 = ;
+
+: full-house? ( cards -- ? )
+  [ rank>> ] map
+  sorted-histogram values { 2 3 } = ;
+
+: three-of-a-kind? ( cards -- ? )
+  [ rank>> ] map
+  histogram values maximum 3 = ;
+
+: two-pair? ( cards -- ? )
+  [ rank>> ] map
+  sorted-histogram values { 1 2 2 } = ;
+
+: one-pair? ( cards -- ? )
+  [ rank>> ] map
+  histogram values maximum 2 = ;
+
+: tally-and-reject ( tallies hands quot: ( hand -- ? ) -- tallies' hands' )
+  partition
+  [ length suffix ] dip ; inline
+
+PRIVATE>
+
+MEMO: poker-hand-rankings-1 ( -- n )
+  all-hands length ;
+
+MEMO: poker-hand-rankings-2 ( -- counts )
+  { 0 } all-hands
+  {
+    [ straight-flush? ]
+    [ four-of-a-kind? ]
+    [ full-house? ]
+    [ flush? ]
+    [ straight? ]
+    [ three-of-a-kind? ]
+    [ two-pair? ]
+    [ one-pair? ]
+    [ drop t ]
+  } [ [ tally-and-reject ] call( x y z -- x' y' ) ] each drop ;
+
+: poker-hand-rankings-3 ( -- )
+  poker-hand-rankings-1
+  poker-hand-rankings-2 sum
+  assert= ;
