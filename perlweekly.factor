@@ -1038,13 +1038,14 @@ CONSTANT: deck $[ ranks suits '{ _ _ } [ first2 <card> ] product-map ]
 
 CONSTANT: all-hands $[ deck 5 all-combinations ]
 
+: non-ace>number ( str -- n/str )
+  dup string>number
+  [ nip ] [
+    { { "J" [ 11 ] } { "Q" [ 12 ] } { "K" [ 13 ] } { "A" [ "A" ] } } case
+  ] if* ;
+
 : ranks>alternative-numeric-ranks ( ranks -- seq[seq[int]] )
-  [
-    dup string>number
-    [ nip ] [
-      { { "J" [ 11 ] } { "Q" [ 12 ] } { "K" [ 13 ] } { "A" [ "A" ] } } case
-    ] if*
-  ] map
+  [ non-ace>number ] map
   "A" over in? [
     [ { "A" } { 1 } replace ] [ { "A" } { 14 } replace ] bi 2array
   ] [ 1array ] if ;
