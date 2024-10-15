@@ -1044,11 +1044,14 @@ CONSTANT: all-hands $[ deck 5 all-combinations ]
     { { "J" [ 11 ] } { "Q" [ 12 ] } { "K" [ 13 ] } { "A" [ "A" ] } } case
   ] if* ;
 
+: aces-two-ways ( cards -- aces-low-and-high )
+  [ { "A" } { 1 } replace ]
+  [ { "A" } { 14 } replace ]
+  bi 2array ;
+
 : ranks>alternative-numeric-ranks ( ranks -- seq[seq[int]] )
   [ non-ace>number ] map
-  "A" over in? [
-    [ { "A" } { 1 } replace ] [ { "A" } { 14 } replace ] bi 2array
-  ] [ 1array ] if ;
+  "A" over in? [ aces-two-ways ] [ 1array ] if ;
 
 : flush? ( cards -- ? )
   [ suit>> ] map cardinality 1 = ;
