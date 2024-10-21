@@ -1139,14 +1139,13 @@ MEMO: poker-hand-rankings-2 ( -- counts )
 TUPLE: zuma-state board hand ;
 C: <zuma-state> zuma-state
 
-CONSTANT: zuma-astar $[
+: zuma-astar ( -- obj )
   [
     [ board>> ] [ hand>> ] bi
     [ zuma-moves ] 2keep-under
     [ 2pick zuma-move ] assoc-map 2nip
     [ first2 <zuma-state> ] map
-  ] [ 2drop 1 ] [ 2drop 1 ] <astar>
-]
+  ] [ 2drop 1 ] [ 2drop 1 ] <astar> ;
 
 PRIVATE>
 
