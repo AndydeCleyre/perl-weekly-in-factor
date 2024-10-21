@@ -1122,10 +1122,10 @@ MEMO: poker-hand-rankings-2 ( -- counts )
 <PRIVATE
 
 : cull-board ( board -- board' )
-  [ length ] [ [ ] group-by ] bi
+  dup [ ] group-by
   [ last length 2 > ] reject
   values "" concat-as
-  swap over length =
+  [ = ] keep-under
   [ cull-board ] unless ;
 
 : zuma-moves ( board hand -- idx-char-pairs )
