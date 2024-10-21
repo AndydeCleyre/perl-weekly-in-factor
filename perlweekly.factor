@@ -17,6 +17,7 @@ USING:
   random ranges regexp
   see
   sets sequences sequences.extras sequences.product
+  shuffle
   sorting sorting.specification splitting strings
   unicode
   validators vectors
@@ -1110,3 +1111,45 @@ MEMO: poker-hand-rankings-2 ( -- counts )
   poker-hand-rankings-1
   poker-hand-rankings-2 sum
   assert= ;
+
+! -- 292 --
+
+: twice-largest ( ints -- i/-1 )
+  dup inv-sort first2
+  dupd 2 * >=
+  [ index* ] [ 2drop -1 ] if ;
+
+<PRIVATE
+
+: cull-board ( board -- board' )
+  [ length ] [ [ ] group-by ] bi
+  [ last length 2 > ] reject
+  values "" concat-as
+  swap over length =
+  [ cull-board ] unless ;
+
+: zuma-moves ( board hand -- idx-char-pairs )
+  [ length [0..b] ] [ members ] bi*
+  2array <product-sequence> ;
+
+: zuma-move ( idx char board hand -- board' hand' )
+  pick remove-first-of
+  [ swapd insert-nth cull-board ] dip ;
+
+TUPLE: zuma-state board hand ;
+C: <zuma-state> zuma-state
+
+CONSTANT: zuma-astar $[
+  [
+    [ board>> ] [ hand>> ] bi
+    [ zuma-moves ] 2keep-under
+    [ 2pick zuma-move ] assoc-map 2nip
+    [ first2 <zuma-state> ] map
+  ] [ 2drop 1 ] [ 2drop 1 ] <astar>
+]
+
+PRIVATE>
+
+: zuma-game ( board hand -- n/-1 )
+  <zuma-state> [ board>> empty? ] zuma-astar find-path*
+  [ length 1 - ] [ -1 ] if* ;
