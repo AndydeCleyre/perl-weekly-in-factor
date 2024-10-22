@@ -1141,7 +1141,7 @@ C: <zuma-state> zuma-state
 : zuma-astar ( -- obj )
   [
     [ board>> ] [ hand>> ] bi
-    [ zuma-moves ] 2keep-under
+    2dup zuma-moves
     [ 2pick zuma-move ] assoc-map 2nip
     [ first2 <zuma-state> ] map
   ] [ 2drop 1 ] [ 2drop 1 ] <astar> ;
