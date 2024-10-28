@@ -11,7 +11,7 @@ USING:
   literals
   make
   math math.combinatorics math.functions math.intervals math.matrices
-  math.order math.parser math.statistics math.vectors
+  math.order math.parser math.points math.statistics math.vectors
   path-finding
   prettyprint
   random ranges regexp
@@ -1151,3 +1151,32 @@ PRIVATE>
 : zuma-game ( board hand -- n/-1 )
   <zuma-state> [ board>> empty? ] zuma-astar find-path*
   [ length 1 - ] [ -1 ] if* ;
+
+! -- 293 --
+
+: similar-dominos ( dominos -- n )
+  [ >hash-set ] histogram-by
+  values
+  [ 1 > ] filter sum ;
+
+<PRIVATE
+
+: colinear? ( points -- ? )
+  dup keys histogram
+  {
+    { [ >alist length 1 = ] [ drop t ] }
+    { [ values [ 1 > ] any? ] [ drop f ] }
+    [
+      drop 2 all-combinations
+      [ first2 slope ] map
+      cardinality 1 =
+    ]
+  } cond-case ;
+
+PRIVATE>
+
+: boomerang? ( points -- ? )
+  {
+    [ cardinality 3 = ]
+    [ colinear? not ]
+  } && ;
