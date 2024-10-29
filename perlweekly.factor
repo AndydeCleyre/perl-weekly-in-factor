@@ -1162,10 +1162,10 @@ PRIVATE>
 <PRIVATE
 
 : colinear? ( points -- ? )
-  dup keys histogram
+  dup keys histogram values
   {
-    { [ >alist length 1 = ] [ drop t ] }
-    { [ values [ 1 > ] any? ] [ drop f ] }
+    { [ length 1 = ] [ drop t ] }
+    { [ [ 1 > ] any? ] [ drop f ] }
     [
       drop 2 all-combinations
       [ first2 slope ] map
