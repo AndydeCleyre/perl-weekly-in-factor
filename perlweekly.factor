@@ -945,11 +945,10 @@ TUPLE: Span row string interval ;
   ] matrix-map-index concat ;
 
 : span-neighbor? ( span1 span2 -- ? )
-  [ [ row>> ] [ string>> ] [ interval>> ] tri 3array ] bi@
   {
-    [ [ first ] bi@ - abs 1 = ]
-    [ [ second ] bi@ = ]
-    [ [ third ] bi@ intervals-intersect? ]
+    [ [ row>> ] bi@ - abs 1 = ]
+    [ [ string>> ] bi@ = ]
+    [ [ interval>> ] bi@ intervals-intersect? ]
   } && ;
 
 : all-neighbors ( m -- neighbors )
