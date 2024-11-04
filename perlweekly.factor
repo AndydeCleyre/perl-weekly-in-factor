@@ -18,7 +18,9 @@ USING:
   see
   sets sequences sequences.extras sequences.product
   shuffle
-  sorting sorting.specification splitting strings
+  sorting sorting.specification
+  splitting splitting.monotonic
+  strings
   unicode
   validators vectors
 ;
@@ -1179,3 +1181,13 @@ PRIVATE>
     [ cardinality 3 = ]
     [ colinear? not ]
   } && ;
+
+! -- 294 --
+
+! This probably isn't O(n)
+: consecutive-seq ( ints -- n/-1 )
+  sort [ 1 - = ] monotonic-split
+  [ length ] map-maximum
+  [ 1 = ] [ drop -1 ] 1when ;
+
+! next-permutation already exists in Factor
