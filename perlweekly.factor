@@ -1191,3 +1191,27 @@ PRIVATE>
   [ 1 = ] [ drop -1 ] 1when ;
 
 ! next-permutation already exists in Factor
+
+! -- 295 --
+
+: word-break? ( str words -- ? )
+  [ "" replace ] each empty? ;
+
+<PRIVATE
+
+: jump-game-neighbors ( idx ints -- idxs )
+  dupd nth
+  dupd +
+  (a..b] ;
+
+: jump-game-astar ( ints -- astar )
+  '[ _ jump-game-neighbors ]
+  [ 2drop 1 ] [ 2drop 1 ] <astar> ;
+
+PRIVATE>
+
+: jump-game ( ints -- n )
+  [ 0 ] dip
+  [ length 1 - ] [ jump-game-astar ] bi
+  find-path
+  [ length 1 - ] [ -1 ] if* ;
