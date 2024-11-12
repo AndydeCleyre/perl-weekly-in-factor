@@ -1211,7 +1211,7 @@ PRIVATE>
 PRIVATE>
 
 : jump-game ( ints -- n )
-  [ 0 ] dip
+  0 swap
   [ length 1 - ] [ jump-game-astar ] bi
   find-path
   [ length 1 - ] [ -1 ] if* ;
