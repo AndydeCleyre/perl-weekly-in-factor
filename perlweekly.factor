@@ -1215,3 +1215,50 @@ PRIVATE>
   [ length 1 - ] [ jump-game-astar ] bi
   find-path
   [ length 1 - ] [ -1 ] if* ;
+
+! -- 296 --
+
+: string-compress ( chars -- str )
+  [ ] group-by [
+    first2 length dup 1 > [
+      number>string swap suffix
+    ] [
+      drop 1string
+    ] if
+  ] map-concat ;
+
+: string-decompress ( str -- chars )
+  [ digit? ] group-by
+  [ [ last ] map ] [ [ first ] find-all ] bi
+  [
+    first over over 1 + '[
+      string>number 1 -
+      over _ nth-of first <array>
+    ] change-nth
+  ] each concat >string ;
+
+<PRIVATE
+
+TUPLE: matchstick id size ;
+C: <matchstick> matchstick
+
+: length-bounds ( ints -- min max )
+  [ maximum ] [ sort 3 tail sum ] bi ;
+
+: n-square? ( n subsets -- ? )
+  swap '[ [ size>> ] map-sum _ = ] filter
+  4 all-combinations
+  [ 2 all-combinations [ first2 intersects? not ] all? ] any? ;
+
+PRIVATE>
+
+: matchstick-square? ( ints -- ? )
+  f swap
+  dup length 4 < [ drop ] [
+    [ [ swap <matchstick> ] map-index all-subsets ]
+    [ length-bounds [a..b] ] bi
+    [
+      unclip pick n-square?
+      [ drop [ not ] dip f ] when
+    ] until-empty drop
+  ] if ;
