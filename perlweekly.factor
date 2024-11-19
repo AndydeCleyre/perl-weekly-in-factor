@@ -1227,6 +1227,13 @@ PRIVATE>
 
 <PRIVATE
 
+: clump-compressed ( str -- clumps num-indices )
+! "2bcd2e" --
+! { "2" "bcd" "2" "e" } { 0 2 }
+  [ digit? ] group-by
+  [ [ last ] map ]
+  [ [ first ] find-all keys ] bi ;
+
 : unpack-numstr-at ( seq i -- seq' )
 ! { "3" "ab" "2" "cd" } 0 --
 ! { "aa" "ab" "2" "cd" }
@@ -1238,9 +1245,7 @@ PRIVATE>
 PRIVATE>
 
 : string-decompress ( str -- chars )
-  [ digit? ] group-by
-  [ [ last ] map ]
-  [ [ first ] find-all keys ] bi
+  clump-compressed
   [ unpack-numstr-at ] each
   "" concat-as ;
 
