@@ -1220,22 +1220,27 @@ PRIVATE>
 
 : string-compress ( chars -- str )
   [ ] group-by [
-    first2 length dup 1 > [
-      number>string swap suffix
-    ] [
-      drop 1string
-    ] if
+    first2 length dup 1 >
+    [ number>string swap suffix ]
+    [ drop 1string ] if
   ] map-concat ;
+
+<PRIVATE
+
+: unpack-numstr-at ( seq i -- seq' )
+  2dup 1 + '[
+    string>number 1 -
+    over _ nth-of first <array>
+  ] change-nth ;
+
+PRIVATE>
 
 : string-decompress ( str -- chars )
   [ digit? ] group-by
-  [ [ last ] map ] [ [ first ] find-all ] bi
-  [
-    first over over 1 + '[
-      string>number 1 -
-      over _ nth-of first <array>
-    ] change-nth
-  ] each concat >string ;
+  [ [ last ] map ]
+  [ [ first ] find-all keys ] bi
+  [ unpack-numstr-at ] each
+  "" concat-as ;
 
 <PRIVATE
 
