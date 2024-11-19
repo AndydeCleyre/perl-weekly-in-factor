@@ -1267,11 +1267,7 @@ C: <matchstick> matchstick
 PRIVATE>
 
 : matchstick-square? ( ints -- ? )
-  f swap
-  dup length 4 < [ drop ] [
+  dup length 4 < [ drop f ] [
     [ size-range ] [ matchstick-subsets ] bi
-    '[
-      unclip _ n-square?
-      [ drop not f ] when
-    ] until-empty
+    '[ _ n-square? ] any?
   ] if ;
