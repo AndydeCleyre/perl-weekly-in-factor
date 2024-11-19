@@ -1220,17 +1220,19 @@ PRIVATE>
 
 : string-compress ( chars -- str )
   [ ] group-by [
-    first2 length dup 1 >
-    [ number>string swap suffix ]
-    [ drop 1string ] if
+    first2 length
+    dup 1 = [ drop 1string ]
+    [ number>string swap suffix ] if
   ] map-concat ;
 
 <PRIVATE
 
 : unpack-numstr-at ( seq i -- seq' )
+! { "3" "ab" "2" "cd" } 0 --
+! { "aa" "ab" "2" "cd" }
   2dup 1 + '[
     string>number 1 -
-    over _ nth-of first <array>
+    over _ nth-of first <string>
   ] change-nth ;
 
 PRIVATE>
@@ -1252,14 +1254,10 @@ C: <matchstick> matchstick
   [ sort 3 tail sum ] bi
   [a..b] ;
 
-: no-dup-elements? ( seqs -- ? )
-  2 all-combinations
-  [ first2 intersects? ] none? ;
-
 : n-square? ( n matchstick-subsets -- ? )
   swap '[ [ size>> ] map-sum _ = ] filter
   4 all-combinations
-  [ no-dup-elements? ] any? ;
+  [ concat all-unique? ] any? ;
 
 : matchstick-subsets ( ints -- matchstick-subsets )
   [ <matchstick> ] map-index all-subsets ;
