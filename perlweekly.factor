@@ -1239,26 +1239,34 @@ PRIVATE>
 
 <PRIVATE
 
-TUPLE: matchstick id size ;
+TUPLE: matchstick size id ;
 C: <matchstick> matchstick
 
-: length-bounds ( ints -- min max )
-  [ maximum ] [ sort 3 tail sum ] bi ;
+: size-range ( ints -- range )
+  [ maximum ]
+  [ sort 3 tail sum ] bi
+  [a..b] ;
 
-: n-square? ( n subsets -- ? )
+: no-dup-elements? ( seqs -- ? )
+  2 all-combinations
+  [ first2 intersects? ] none? ;
+
+: n-square? ( n matchstick-subsets -- ? )
   swap '[ [ size>> ] map-sum _ = ] filter
   4 all-combinations
-  [ 2 all-combinations [ first2 intersects? not ] all? ] any? ;
+  [ no-dup-elements? ] any? ;
+
+: matchstick-subsets ( ints -- matchstick-subsets )
+  [ <matchstick> ] map-index all-subsets ;
 
 PRIVATE>
 
 : matchstick-square? ( ints -- ? )
   f swap
   dup length 4 < [ drop ] [
-    [ [ swap <matchstick> ] map-index all-subsets ]
-    [ length-bounds [a..b] ] bi
-    [
-      unclip pick n-square?
-      [ drop [ not ] dip f ] when
-    ] until-empty drop
+    [ size-range ] [ matchstick-subsets ] bi
+    '[
+      unclip _ n-square?
+      [ drop not f ] when
+    ] until-empty
   ] if ;
