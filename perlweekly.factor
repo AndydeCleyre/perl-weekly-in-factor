@@ -1277,11 +1277,16 @@ PRIVATE>
 
 : -- 297 --
 
+<PRIVATE
+
+: half-and-half? ( seq -- ? )
+  histogram values
+  { [ length 2 = ] [ cardinality 1 = ] } && ;
+
+PRIVATE>
+
 : contiguous-array ( binary -- n )
-  all-subseqs [
-    histogram values
-    { [ length 2 = ] [ cardinality 1 = ] } &&
-  ] filter
+  all-subseqs [ half-and-half? ] filter
   [ 0 ] [ [ length ] map-maximum ] if-empty ;
 
 : semi-ordered-perm ( ints -- n )
