@@ -1274,3 +1274,17 @@ PRIVATE>
     [ size-range ] [ matchstick-subsets ] bi
     '[ _ n-square? ] any?
   ] if ;
+
+: -- 297 --
+
+: contiguous-array ( binary -- n )
+  all-subseqs [
+    histogram values
+    { [ length 2 = ] [ cardinality 1 = ] } &&
+  ] filter
+  [ 0 ] [ [ length ] map-maximum ] if-empty ;
+
+: semi-ordered-perm ( ints -- n )
+  [ length ] [ over index* ] [ 1 index* ] tri
+  [ [ - 1 - ] dip + ] 2keep
+  < [ 1 - ] when ;
