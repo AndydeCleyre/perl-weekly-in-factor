@@ -1289,7 +1289,14 @@ PRIVATE>
   all-subseqs [ half-and-half? ] filter
   [ 0 ] [ [ length ] map-maximum ] if-empty ;
 
+<PRIVATE
+
+: naive-combined-distance ( length tailbound-index headbound-index -- n )
+  [ - 1 - ] dip + ;
+
+PRIVATE>
+
 : semi-ordered-perm ( ints -- n )
   [ length ] [ over index* ] [ 1 index* ] tri
-  [ [ - 1 - ] dip + ] 2keep
+  [ naive-combined-distance ] 2keep
   < [ 1 - ] when ;
