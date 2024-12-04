@@ -1300,3 +1300,33 @@ PRIVATE>
   [ length ] [ over index* ] [ 1 index* ] tri
   [ naive-combined-distance ] 2keep
   < [ 1 - ] when ;
+
+! -- 298 --
+
+<PRIVATE
+
+: square-elements ( matrix origin-row origin-col size -- ints/f )
+  '[ dup _ + [a..b) ] bi@
+  [
+    [ swap rows ] dip
+    swap cols concat
+  ] [ 4drop f ] recover ;
+
+: one-square? ( matrix origin-row origin-col size -- ? )
+  square-elements { [ empty? not ] [ [ 1 = ] all? ] } && ;
+
+: one-square-anywhere? ( size matrix -- ? )
+  dup dimension <cartesian-indices> concat
+  rot '[ first2 _ one-square? ] with any? ;
+
+PRIVATE>
+
+: maximal-square ( m -- area )
+  [ dimension minimum ] keep
+  '[ _ one-square-anywhere? ] find-last-integer
+  [ sq ] [ 0 ] if* ;
+
+: right-intervals ( pairs -- indices )
+  [ ] [ [ first ] sort-by ] [ [ last ] map ] tri  ! pairs sorted-pairs ends
+  [ '[ first _ >= ] find nip ] with map           ! pairs { pair/f ... }
+  [ [ index* ] [ drop -1 ] if* ] with map ;
